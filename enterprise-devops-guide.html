@@ -1,0 +1,2610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note Canva — Enterprise DevOps Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ─────────────────────────────────────────
+   TOKENS — dark (default)
+───────────────────────────────────────── */
+:root {
+  --bg:       #0b0d12;
+  --s1:       #0f1218;
+  --s2:       #151b26;
+  --s3:       #1c2233;
+  --border:   #232a3c;
+  --border2:  #2d364f;
+  --blue:     #4d9eff;
+  --blue-d:   #1a3660;
+  --green:    #2dd98f;
+  --green-d:  #0b3020;
+  --yellow:   #f7c84e;
+  --yellow-d: #382c0a;
+  --red:      #f06e6e;
+  --red-d:    #3a1212;
+  --purple:   #a78bfa;
+  --purple-d: #2a1a5e;
+  --text:     #dde4f0;
+  --text2:    #8899b8;
+  --text3:    #4f607e;
+  --mono:     'JetBrains Mono', monospace;
+  --sans:     'Inter', sans-serif;
+  --nav-w:    288px;
+  --content:  860px;
+  /* syntax */
+  --syn-key:  #6badf7;
+  --syn-val:  #2dd98f;
+  --syn-com:  #3a4e6a;
+  --syn-str:  #f7c84e;
+  --syn-pre:  #c5d5ee;
+}
+
+/* ─────────────────────────────────────────
+   TOKENS — light
+───────────────────────────────────────── */
+[data-theme="light"] {
+  --bg:       #f4f6fb;
+  --s1:       #ffffff;
+  --s2:       #edf0f7;
+  --s3:       #e2e6f0;
+  --border:   #ccd3e4;
+  --border2:  #b3bdd4;
+  --blue:     #1a6fcf;
+  --blue-d:   #dbeafe;
+  --green:    #0e8a5a;
+  --green-d:  #d1fae5;
+  --yellow:   #8a5e0a;
+  --yellow-d: #fef3c7;
+  --red:      #b91c1c;
+  --red-d:    #fee2e2;
+  --purple:   #6d28d9;
+  --purple-d: #ede9fe;
+  --text:     #0f172a;
+  --text2:    #334155;
+  --text3:    #64748b;
+  --syn-key:  #1a6fcf;
+  --syn-val:  #0e8a5a;
+  --syn-com:  #94a3b8;
+  --syn-str:  #8a5e0a;
+  --syn-pre:  #1e293b;
+}
+[data-theme="light"] .cw pre      { color: var(--syn-pre); }
+[data-theme="light"] .term        { background: #f0f3fa; }
+[data-theme="light"] .term pre    { color: #334155; }
+[data-theme="light"] .term .p     { color: #0e8a5a; }
+[data-theme="light"] .term .c     { color: #0f172a; }
+[data-theme="light"] .term .o     { color: #94a3b8; }
+[data-theme="light"] .term .ok    { color: #0e8a5a; }
+[data-theme="light"] .term .er    { color: #b91c1c; }
+[data-theme="light"] .interview-box { background: #f0faf6; border-color: #6ee7b7; }
+[data-theme="light"] .brain-box   { background: #fffbeb; border-color: #fcd34d; }
+[data-theme="light"] .hf-box      { background: #fff8f0; border-color: #fdba74; }
+[data-theme="light"] tr:nth-child(even) td { background: #f8faff; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.75;
+  display: flex;
+  justify-content: center;
+  transition: background .2s, color .2s;
+}
+
+.page-shell {
+  display: flex;
+  width: 100%;
+  max-width: calc(var(--nav-w) + var(--content) + 4rem);
+  min-height: 100vh;
+}
+
+/* ─────────────────────────────────────────
+   SIDEBAR NAV
+───────────────────────────────────────── */
+nav {
+  width: var(--nav-w);
+  min-width: var(--nav-w);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background: var(--s1);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding-bottom: 4rem;
+  flex-shrink: 0;
+  transition: background .2s, border-color .2s;
+}
+
+/* header block */
+.nav-header {
+  padding: 1.2rem 1.3rem 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: .3rem;
+}
+.nav-title   { font-weight: 700; font-size: .88rem; color: var(--text); letter-spacing: -.01em; }
+.nav-sub     { font-size: .67rem; color: var(--text3); margin-top: .12rem; font-family: var(--mono); }
+
+/* chapter tabs */
+.nav-chapters {
+  display: flex;
+  gap: 4px;
+  padding: .65rem 1rem .55rem;
+  border-bottom: 1px solid var(--border);
+}
+.nav-chapter-btn {
+  flex: 1;
+  padding: .3rem .4rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--s2);
+  color: var(--text3);
+  font-family: var(--mono);
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  cursor: pointer;
+  text-align: center;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.nav-chapter-btn:hover { color: var(--text); background: var(--s3); }
+.nav-chapter-btn.active-k8s  { background: var(--blue-d);   color: var(--blue);   border-color: var(--blue); }
+.nav-chapter-btn.active-tf   { background: var(--purple-d); color: var(--purple); border-color: var(--purple); }
+
+/* chapter panels */
+.nav-panel { display: none; }
+.nav-panel.visible { display: block; }
+
+.nav-group {
+  font-family: var(--mono); font-size: .56rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--text3);
+  padding: .9rem 1.3rem .25rem;
+}
+nav a {
+  display: block; padding: .26rem 1.3rem .26rem 1.15rem;
+  color: var(--text2); text-decoration: none; font-size: .76rem;
+  border-left: 2px solid transparent; line-height: 1.45;
+  transition: color .1s, border-color .1s, background .1s;
+}
+.nav-panel-k8s  a:hover { color: var(--text); border-left-color: var(--blue);   background: var(--s2); }
+.nav-panel-tf   a:hover { color: var(--text); border-left-color: var(--purple); background: var(--s2); }
+nav a.sub  { padding-left: 2rem; font-size: .72rem; color: var(--text3); }
+nav a.sub:hover { color: var(--text2); }
+
+/* coming-soon chapters */
+.nav-future {
+  padding: .65rem 1.3rem;
+  border-top: 1px solid var(--border);
+  margin-top: .5rem;
+}
+.nav-future-title {
+  font-family: var(--mono); font-size: .56rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--text3);
+  margin-bottom: .5rem;
+}
+.nav-future-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .3rem 0;
+  font-size: .74rem; color: var(--text3);
+}
+.nav-future-badge {
+  font-family: var(--mono); font-size: .54rem; font-weight: 600;
+  background: var(--s3); color: var(--text3); border: 1px solid var(--border);
+  padding: .1rem .4rem; border-radius: 20px; letter-spacing: .04em;
+}
+
+/* theme toggle */
+.theme-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: .6rem 1rem .4rem;
+  padding: .38rem .6rem;
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 7px; cursor: pointer; user-select: none;
+  transition: background .15s;
+}
+.theme-toggle:hover { background: var(--s3); }
+.theme-toggle-label {
+  font-family: var(--mono); font-size: .62rem; font-weight: 600;
+  letter-spacing: .04em; color: var(--text3);
+  display: flex; align-items: center; gap: .4rem;
+}
+.theme-toggle-track {
+  width: 30px; height: 17px; background: var(--border2); border-radius: 9px;
+  position: relative; transition: background .2s; flex-shrink: 0;
+}
+[data-theme="light"] .theme-toggle-track { background: var(--purple); }
+.theme-toggle-thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 13px; height: 13px; background: #fff;
+  border-radius: 50%; transition: transform .2s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+}
+[data-theme="light"] .theme-toggle-thumb { transform: translateX(13px); }
+
+/* ─────────────────────────────────────────
+   MAIN CONTENT AREA
+───────────────────────────────────────── */
+main {
+  flex: 1; min-width: 0;
+  max-width: var(--content);
+  padding: 3rem 3.5rem 8rem;
+}
+
+/* chapter sections — only active one shown */
+.chapter { display: none; }
+.chapter.visible { display: block; }
+
+/* ─────────────────────────────────────────
+   TYPOGRAPHY
+───────────────────────────────────────── */
+h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.15; margin-bottom: .7rem; }
+h1 em { font-style: normal; color: var(--blue); }
+h1 em.p { color: var(--purple); }
+
+h2 {
+  font-size: 1.3rem; font-weight: 700; letter-spacing: -.02em;
+  margin: 2.8rem 0 .55rem; scroll-margin-top: 1.5rem;
+  display: flex; align-items: center; gap: .55rem;
+}
+h3 { font-size: .96rem; font-weight: 600; color: var(--text); margin: 1.7rem 0 .4rem; scroll-margin-top: 1.5rem; }
+
+p  { color: var(--text2); margin-bottom: .85rem; }
+p strong { color: var(--text); font-weight: 600; }
+p a { color: var(--blue); text-decoration: none; }
+p a:hover { text-decoration: underline; }
+p code, li code {
+  font-family: var(--mono); font-size: .78rem;
+  background: var(--s3); border: 1px solid var(--border);
+  padding: .1rem .36rem; border-radius: 4px; color: var(--blue);
+}
+ul, ol { margin: .4rem 0 .9rem 1.2rem; color: var(--text2); }
+li { margin-bottom: .28rem; font-size: .91rem; }
+li strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 2.4rem 0; }
+
+.badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 24px; height: 20px; border-radius: 4px;
+  font-family: var(--mono); font-size: .62rem; font-weight: 600;
+  padding: 0 5px; flex-shrink: 0;
+  background: var(--blue); color: #fff;
+}
+.badge.g { background: #1a6e47; color: var(--green); }
+.badge.y { background: #4a3609; color: var(--yellow); }
+.badge.p { background: #3d2a7a; color: var(--purple); }
+.badge.r { background: #5a1a1a; color: var(--red); }
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.hero { padding-bottom: 2.2rem; border-bottom: 1px solid var(--border); margin-bottom: 2.2rem; }
+.hero-pill {
+  display: inline-block; border: 1px solid; border-radius: 20px;
+  font-family: var(--mono); font-size: .64rem; font-weight: 600;
+  padding: .2rem .7rem; letter-spacing: .06em; margin-bottom: .85rem;
+}
+.hero-pill.blue   { background: var(--blue-d);   border-color: var(--blue);   color: var(--blue); }
+.hero-pill.purple { background: var(--purple-d); border-color: var(--purple); color: var(--purple); }
+.hero-meta { display: flex; gap: 1.3rem; margin-top: .9rem; flex-wrap: wrap; }
+.hero-meta-item { font-size: .76rem; color: var(--text3); font-family: var(--mono); }
+.hero-meta-item span { color: var(--text2); }
+
+/* ─────────────────────────────────────────
+   CODE BLOCKS
+───────────────────────────────────────── */
+.cw { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; margin: .85rem 0 1.25rem; overflow: hidden; }
+.ch { display: flex; justify-content: space-between; align-items: center; padding: .4rem .9rem; background: var(--s2); border-bottom: 1px solid var(--border); }
+.cf { font-family: var(--mono); font-size: .68rem; color: var(--text2); font-weight: 600; }
+.cl { font-family: var(--mono); font-size: .62rem; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; }
+.cw pre { padding: .9rem 1rem; overflow-x: auto; margin: 0; font-family: var(--mono); font-size: .79rem; line-height: 1.65; color: var(--syn-pre); }
+.ck { color: var(--syn-key); }
+.cv { color: var(--syn-val); }
+.cc { color: var(--syn-com); font-style: italic; }
+.cs { color: var(--syn-str); }
+
+/* ─────────────────────────────────────────
+   NOTES / CALLOUTS
+───────────────────────────────────────── */
+.note { border-left: 3px solid; border-radius: 0 6px 6px 0; padding: .8rem 1.05rem; margin: 1.1rem 0; font-size: .87rem; }
+.note p { margin: 0; line-height: 1.58; }
+.note .nl { font-family: var(--mono); font-size: .6rem; font-weight: 600; letter-spacing: .08em; display: block; margin-bottom: .3rem; }
+.note.info   { border-color: var(--blue);   background: var(--blue-d);   } .note.info   .nl { color: var(--blue);   }
+.note.tip    { border-color: var(--green);  background: var(--green-d);  } .note.tip    .nl { color: var(--green);  }
+.note.warn   { border-color: var(--yellow); background: var(--yellow-d); } .note.warn   .nl { color: var(--yellow); }
+.note.danger { border-color: var(--red);    background: var(--red-d);    } .note.danger .nl { color: var(--red);    }
+.note.purple { border-color: var(--purple); background: var(--purple-d); } .note.purple .nl { color: var(--purple); }
+
+/* ─────────────────────────────────────────
+   HEAD FIRST STYLE BOXES
+───────────────────────────────────────── */
+.hf-box {
+  background: var(--s2); border: 2px solid var(--yellow-d);
+  border-radius: 10px; padding: 1.1rem 1.3rem; margin: 1.4rem 0;
+  position: relative;
+}
+[data-theme="light"] .hf-box { border-color: #fdba74; }
+.hf-label {
+  font-family: var(--mono); font-size: .58rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--yellow);
+  display: flex; align-items: center; gap: .45rem; margin-bottom: .55rem;
+}
+[data-theme="light"] .hf-label { color: #92400e; }
+.hf-label::before { content: "◆"; font-size: .68rem; }
+.hf-box p { color: var(--text2); margin: 0; font-size: .88rem; line-height: 1.62; }
+.hf-box p + p { margin-top: .6rem; }
+.hf-box p strong { color: var(--text); }
+
+/* interview box */
+.iq {
+  background: var(--s2); border: 1px solid var(--green-d);
+  border-left: 3px solid var(--green);
+  border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin: 1.4rem 0;
+}
+.iq-label {
+  font-family: var(--mono); font-size: .57rem; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--green);
+  margin-bottom: .45rem; display: flex; align-items: center; gap: .35rem;
+}
+.iq-label::before { content: "▶"; font-size: .5rem; }
+.iq-q { color: var(--text); font-size: .88rem; font-weight: 600; margin-bottom: .4rem; }
+.iq-a { color: var(--text2); font-size: .85rem; line-height: 1.64; }
+.iq-a strong { color: var(--green); }
+.iq-a br + br { content: ""; display: block; margin-top: .4rem; }
+
+/* ─────────────────────────────────────────
+   TABLES
+───────────────────────────────────────── */
+.tw { overflow-x: auto; margin: .85rem 0 1.25rem; }
+table { width: 100%; border-collapse: collapse; font-size: .83rem; }
+th { background: var(--s3); color: var(--text3); font-family: var(--mono); font-size: .62rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; padding: .5rem .8rem; text-align: left; border: 1px solid var(--border); }
+td { padding: .55rem .8rem; border: 1px solid var(--border); color: var(--text2); vertical-align: top; line-height: 1.52; }
+td code { font-family: var(--mono); font-size: .76rem; background: var(--s3); padding: .1rem .3rem; border-radius: 3px; color: var(--blue); }
+td strong { color: var(--text); font-weight: 600; }
+tr:nth-child(even) td { background: var(--s1); }
+
+/* ─────────────────────────────────────────
+   FILE TREE
+───────────────────────────────────────── */
+.ft { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: .9rem 1.1rem; font-family: var(--mono); font-size: .8rem; line-height: 1.8; color: var(--text2); margin: .85rem 0 1.25rem; }
+.ft .d { color: var(--blue); } .ft .n { color: var(--text3); font-style: italic; }
+
+/* ─────────────────────────────────────────
+   TERMINAL
+───────────────────────────────────────── */
+.term { background: #060810; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: .85rem 0 1.25rem; }
+.tbar { background: var(--s2); border-bottom: 1px solid var(--border); padding: .36rem .8rem; display: flex; align-items: center; gap: .45rem; }
+.tdot { width: 9px; height: 9px; border-radius: 50%; }
+.ttl  { font-family: var(--mono); font-size: .67rem; color: var(--text3); margin-left: .3rem; }
+.term pre { padding: .9rem 1rem; overflow-x: auto; font-family: var(--mono); font-size: .79rem; line-height: 1.65; color: #8898b4; }
+.term .p  { color: var(--green); } .term .c { color: var(--text); } .term .o { color: var(--text3); }
+.term .ok { color: var(--green); } .term .er { color: var(--red); }
+
+/* ─────────────────────────────────────────
+   FLOW STEPS
+───────────────────────────────────────── */
+.flow { margin: .85rem 0 1.25rem; display: flex; flex-direction: column; }
+.fi   { display: flex; gap: .9rem; }
+.fl   { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.fd   { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); margin-top: .52rem; flex-shrink: 0; }
+.fd.p { background: var(--purple); }
+.fs   { width: 1px; flex: 1; min-height: 10px; background: var(--border2); }
+.fi:last-child .fs { display: none; }
+.fb   { padding-bottom: .9rem; flex: 1; }
+.fb strong { color: var(--text); font-size: .89rem; display: block; margin-bottom: .1rem; }
+.fb p { margin: 0; font-size: .83rem; }
+
+/* ─────────────────────────────────────────
+   SVG DIAGRAMS
+───────────────────────────────────────── */
+.diagram-wrap { margin: .85rem 0 1.25rem; background: var(--s1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.diagram-wrap svg { display: block; width: 100%; }
+
+/* ─────────────────────────────────────────
+   CHAPTER DIVIDERS (between chapters in nav)
+───────────────────────────────────────── */
+.chapter-hero-bar {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .5rem 0 1.2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.chapter-num {
+  font-family: var(--mono); font-size: 3rem; font-weight: 700;
+  line-height: 1; opacity: .07; user-select: none;
+}
+.chapter-num.blue   { color: var(--blue); }
+.chapter-num.purple { color: var(--purple); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+
+/* ─────────────────────────────────────────
+   MOBILE TOP BAR + DRAWER
+───────────────────────────────────────── */
+.mobile-topbar,
+.mobile-drawer-backdrop {
+  display: none;
+}
+
+.mobile-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  margin: -3rem -3.5rem 1.4rem;
+  padding: .8rem 1rem;
+}
+.mobile-topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+}
+.mobile-brand {
+  min-width: 0;
+}
+.mobile-brand-title {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.01em;
+}
+.mobile-brand-sub {
+  font-family: var(--mono);
+  font-size: .62rem;
+  color: var(--text3);
+  margin-top: .12rem;
+}
+.mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  flex-shrink: 0;
+}
+.mobile-menu-btn,
+.mobile-theme-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--s1);
+  color: var(--text2);
+  border-radius: 10px;
+  min-height: 38px;
+  padding: 0 .8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  font-family: var(--mono);
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+.mobile-chapter-tabs {
+  display: flex;
+  gap: .45rem;
+  margin-top: .75rem;
+}
+.mobile-chapter-btn {
+  flex: 1;
+  min-height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--s2);
+  color: var(--text3);
+  font-family: var(--mono);
+  font-size: .67rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.mobile-chapter-btn.active-k8s  { background: var(--blue-d);   color: var(--blue);   border-color: var(--blue); }
+.mobile-chapter-btn.active-tf   { background: var(--purple-d); color: var(--purple); border-color: var(--purple); }
+
+@media (max-width: 980px) {
+  body.drawer-open {
+    overflow: hidden;
+  }
+
+  .page-shell {
+    max-width: 100%;
+    min-height: auto;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    width: min(88vw, 340px);
+    min-width: 0;
+    max-width: 340px;
+    height: 100dvh;
+    transform: translateX(-104%);
+    box-shadow: 0 22px 48px rgba(0,0,0,.35);
+    transition: transform .24s ease;
+  }
+
+  body.drawer-open nav {
+    transform: translateX(0);
+  }
+
+  .mobile-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgba(3, 7, 18, .58);
+  }
+
+  body.drawer-open .mobile-drawer-backdrop {
+    display: block;
+  }
+
+  .mobile-topbar {
+    display: block;
+  }
+
+  main {
+    max-width: 100%;
+    padding: 1.1rem 1rem 4rem;
+  }
+
+  h1 { font-size: 1.72rem; }
+  h2 { font-size: 1.12rem; margin-top: 2rem; }
+  h3 { font-size: .92rem; }
+  p, li { font-size: .92rem; }
+
+  .hero {
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-meta {
+    gap: .55rem;
+    flex-direction: column;
+  }
+
+  .cw pre,
+  .term pre,
+  .ft {
+    font-size: .74rem;
+  }
+
+  .tw table {
+    min-width: 640px;
+  }
+
+  .diagram-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .diagram-wrap svg {
+    min-width: 680px;
+    height: auto;
+  }
+
+  .nav-future {
+    padding-bottom: 1.2rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .mobile-topbar {
+    margin: -1.1rem -1rem 1rem;
+    padding: .8rem .85rem;
+  }
+
+  .mobile-brand-title {
+    font-size: .78rem;
+  }
+
+  .mobile-menu-btn span:last-child,
+  .mobile-theme-btn span:last-child {
+    display: none;
+  }
+
+  .mobile-menu-btn,
+  .mobile-theme-btn {
+    min-width: 38px;
+    padding: 0 .7rem;
+  }
+
+  .mobile-chapter-btn {
+    font-size: .63rem;
+    padding: 0 .45rem;
+  }
+
+  .cw pre,
+  .term pre {
+    padding: .8rem .85rem;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<!-- ═══════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════ -->
+<nav id="sidebar">
+
+  <div class="nav-header">
+    <div class="nav-title">Note Canva · DevOps Guide</div>
+    <div class="nav-sub">enterprise deployment handbook</div>
+  </div>
+
+  <!-- theme toggle -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+    <span class="theme-toggle-label">
+      <svg id="iconMoon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun"  width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <span id="themeLabel">Dark</span>
+    </span>
+    <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+  </button>
+
+  <!-- chapter switcher tabs -->
+  <div class="nav-chapters">
+    <button class="nav-chapter-btn active-k8s" id="btnK8s" onclick="switchChapter('k8s')">Ch 1 · K8s</button>
+    <button class="nav-chapter-btn" id="btnTf" onclick="switchChapter('tf')">Ch 2 · Terraform</button>
+  </div>
+
+  <!-- ── K8S NAV PANEL ── -->
+  <div class="nav-panel nav-panel-k8s visible" id="nav-k8s">
+    <div class="nav-group">Introduction</div>
+    <a href="#k8s-overview">Architecture overview</a>
+    <a href="#k8s-concepts">Docker Compose → K8s</a>
+    <a href="#k8s-setup">Local setup</a>
+
+    <div class="nav-group">Phase 1 · Infrastructure</div>
+    <a href="#k8s-gcp">GCP project setup</a>
+    <a href="#k8s-cluster">Create GKE cluster</a>
+    <a href="#k8s-services">Cloud SQL + Redis</a>
+    <a href="#k8s-registry">Artifact Registry</a>
+
+    <div class="nav-group">Phase 2 · Config &amp; Secrets</div>
+    <a href="#k8s-config-phil">Config philosophy</a>
+    <a href="#k8s-namespaces">Namespaces</a>
+    <a href="#k8s-configmap">ConfigMap</a>
+    <a href="#k8s-secrets">Secrets</a>
+    <a href="#k8s-dns">Service DNS</a>
+
+    <div class="nav-group">Phase 3 · Manifests</div>
+    <a href="#k8s-folder">k8s/ folder structure</a>
+    <a href="#k8s-api">api service</a>
+    <a href="#k8s-realtime">realtime service</a>
+    <a href="#k8s-worker">worker service</a>
+    <a href="#k8s-ingress">Ingress + TLS</a>
+    <a href="#k8s-hpa">HPA + PDB</a>
+
+    <div class="nav-group">Phase 4 · Deploy</div>
+    <a href="#k8s-build">Build &amp; push images</a>
+    <a href="#k8s-apply">Apply manifests</a>
+    <a href="#k8s-verify">Verify + pod statuses</a>
+    <a href="#k8s-shutdown">Graceful shutdown</a>
+
+    <div class="nav-group">Phase 5 · CI/CD</div>
+    <a href="#k8s-cicd">How it works</a>
+    <a href="#k8s-wif">GitHub + WIF setup</a>
+    <a href="#k8s-workflow">Workflow YAML</a>
+    <a href="#k8s-deploy-flow">Change type reference</a>
+
+    <div class="nav-group">Phase 6 · Day-to-day</div>
+    <a href="#k8s-contexts">kubectl contexts</a>
+    <a href="#k8s-ops">Common operations</a>
+    <a href="#k8s-debug">Debugging pods</a>
+    <a href="#k8s-rotate">Rotate secrets</a>
+
+    <div class="nav-group">Phase 7 · GCP Console</div>
+    <a href="#k8s-console">Navigation reference</a>
+    <a href="#k8s-logs">Log Explorer</a>
+    <a href="#k8s-db">Database mgmt</a>
+
+    <div class="nav-group">Reference</div>
+    <a href="#k8s-troubleshoot">Troubleshooting tree</a>
+    <a href="#k8s-cheatsheet">kubectl cheatsheet</a>
+    <a href="#k8s-interview">Interview questions</a>
+  </div>
+
+  <!-- ── TERRAFORM NAV PANEL ── -->
+  <div class="nav-panel nav-panel-tf" id="nav-tf">
+    <div class="nav-group">Why Terraform</div>
+    <a href="#tf-why">gcloud vs Terraform</a>
+    <a href="#tf-model">Mental model</a>
+
+    <div class="nav-group">Phase T1 · Foundations</div>
+    <a href="#tf-structure">Project structure</a>
+    <a href="#tf-state">Remote state &amp; locking</a>
+    <a href="#tf-gke">GKE with Terraform</a>
+    <a href="#tf-workflow">PR → plan → apply</a>
+
+    <div class="nav-group">Phase T2 · Multi-Region</div>
+    <a href="#tf-region-why">Why it's hard</a>
+    <a href="#tf-topology">Region topology</a>
+    <a href="#tf-db-rep">Database replication</a>
+    <a href="#tf-traffic">Global LB + routing</a>
+    <a href="#tf-failover">Failover strategy</a>
+
+    <div class="nav-group">Phase T3 · GitOps</div>
+    <a href="#tf-gitops">GitOps vs push CI/CD</a>
+    <a href="#tf-argocd">ArgoCD setup</a>
+    <a href="#tf-appset">ApplicationSets</a>
+
+    <div class="nav-group">Phase T4 · Secrets</div>
+    <a href="#tf-secret-manager">GCP Secret Manager</a>
+    <a href="#tf-workload-id">Workload Identity</a>
+    <a href="#tf-eso">External Secrets Op.</a>
+
+    <div class="nav-group">Phase T5 · Observability</div>
+    <a href="#tf-obs-pillars">Three pillars</a>
+    <a href="#tf-otel">OpenTelemetry stack</a>
+    <a href="#tf-slo">SLOs &amp; error budgets</a>
+
+    <div class="nav-group">Phase T6 · Cost &amp; Security</div>
+    <a href="#tf-cost">Cost modelling</a>
+    <a href="#tf-netpol">Network policy</a>
+    <a href="#tf-supply-chain">Supply chain</a>
+
+    <div class="nav-group">Reference</div>
+    <a href="#tf-interview">Interview questions</a>
+  </div>
+
+  <!-- coming soon chapters -->
+  <div class="nav-future">
+    <div class="nav-future-title">Coming chapters</div>
+    <div class="nav-future-item"><span>Ch 3 · Service Mesh (Istio)</span><span class="nav-future-badge">soon</span></div>
+    <div class="nav-future-item"><span>Ch 4 · FinOps &amp; Cost Eng.</span><span class="nav-future-badge">soon</span></div>
+    <div class="nav-future-item"><span>Ch 5 · Platform Engineering</span><span class="nav-future-badge">planned</span></div>
+    <div class="nav-future-item"><span>Ch 6 · Zero-Trust Security</span><span class="nav-future-badge">planned</span></div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     MAIN
+════════════════════════════════════════ -->
+<main>
+
+<div class="mobile-drawer-backdrop" id="mobileBackdrop"></div>
+<div class="mobile-topbar">
+  <div class="mobile-topbar-row">
+    <div class="mobile-brand">
+      <div class="mobile-brand-title">Note Canva · DevOps Guide</div>
+      <div class="mobile-brand-sub" id="mobileChapterLabel">chapter 1 · kubernetes</div>
+    </div>
+    <div class="mobile-actions">
+      <button class="mobile-theme-btn" id="mobileThemeToggle" aria-label="Toggle theme">
+        <span>◐</span><span>Theme</span>
+      </button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="sidebar">
+        <span>☰</span><span>Contents</span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-chapter-tabs">
+    <button class="mobile-chapter-btn active-k8s" id="mobileBtnK8s" onclick="switchChapter('k8s')">Ch 1 · K8s</button>
+    <button class="mobile-chapter-btn" id="mobileBtnTf" onclick="switchChapter('tf')">Ch 2 · Terraform</button>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  CHAPTER 1 — KUBERNETES             ║
+     ╚══════════════════════════════════════╝ -->
+<div class="chapter visible" id="chapter-k8s">
+
+<div class="hero">
+  <div class="hero-pill blue">CHAPTER 1 · KUBERNETES</div>
+  <h1>Note Canva on <em>Kubernetes</em></h1>
+  <p>Everything from zero to a production GKE deployment — with GitHub Actions CI/CD, autoscaling, zero-downtime deploys, and a full ops reference. You know Docker Compose. That's exactly the right starting point.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">Stack: <span>Node.js · GKE · Redis · PostgreSQL · BullMQ</span></div>
+    <div class="hero-meta-item">Region: <span>europe-west1</span></div>
+    <div class="hero-meta-item">Services: <span>api · realtime · worker</span></div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<h2 id="k8s-overview">Architecture overview</h2>
+<p>Three services, one public IP. Traffic enters through a Google Cloud Load Balancer, hits a Kubernetes Ingress that routes by URL path, and fans out to the right pods. Think of it like your Nginx config — but managed, auto-scaling, and self-healing.</p>
+
+<div class="diagram-wrap">
+<svg width="100%" viewBox="0 0 780 480" role="img">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="320" y="18" width="140" height="36" rx="6" fill="#1a3660" stroke="#4d9eff" stroke-width="0.5"/>
+  <text x="390" y="36" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="12" fill="#4d9eff" font-weight="600">Internet</text>
+  <line x1="390" y1="54" x2="390" y2="78" stroke="#4d9eff" stroke-width="1" marker-end="url(#arr)"/>
+  <rect x="255" y="78" width="270" height="42" rx="8" fill="#152640" stroke="#4d9eff" stroke-width="1"/>
+  <text x="390" y="93" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="13" fill="#4d9eff" font-weight="600">Google Cloud Load Balancer</text>
+  <text x="390" y="109" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">public IP · TLS termination</text>
+  <line x1="390" y1="120" x2="390" y2="144" stroke="#4d9eff" stroke-width="1" marker-end="url(#arr)"/>
+  <rect x="255" y="144" width="270" height="42" rx="8" fill="#152640" stroke="#4d9eff" stroke-width="1"/>
+  <text x="390" y="159" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="13" fill="#4d9eff" font-weight="600">Kubernetes Ingress</text>
+  <text x="390" y="175" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">/api/* and /ws/* routing</text>
+  <path d="M310 186 L310 218 L170 218 L170 244" fill="none" stroke="#2dd98f" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="230" y="213" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#2dd98f">/api/*</text>
+  <path d="M470 186 L470 218 L620 218 L620 244" fill="none" stroke="#a78bfa" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="556" y="213" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#a78bfa">/ws/*</text>
+  <rect x="80" y="244" width="180" height="52" rx="8" fill="#0d2e1c" stroke="#2dd98f" stroke-width="1"/>
+  <text x="170" y="262" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="13" fill="#2dd98f" font-weight="600">api pods ×2</text>
+  <text x="170" y="280" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">REST · auth · enqueue</text>
+  <rect x="530" y="244" width="180" height="52" rx="8" fill="#25204a" stroke="#a78bfa" stroke-width="1"/>
+  <text x="620" y="262" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="13" fill="#a78bfa" font-weight="600">realtime-0, realtime-1</text>
+  <text x="620" y="280" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">WebSocket · pub/sub</text>
+  <text x="390" y="266" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">no public route ↓</text>
+  <line x1="390" y1="274" x2="390" y2="300" stroke="#4f607e" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+  <rect x="305" y="300" width="170" height="52" rx="8" fill="#24160e" stroke="#f7c84e" stroke-width="0.8"/>
+  <text x="390" y="318" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="13" fill="#f7c84e" font-weight="600">worker pods ×1–N</text>
+  <text x="390" y="336" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">BullMQ · preview · mail</text>
+  <line x1="170" y1="296" x2="100" y2="382" stroke="#4f607e" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+  <line x1="390" y1="352" x2="140" y2="398" stroke="#4f607e" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+  <line x1="620" y1="296" x2="240" y2="400" stroke="#4f607e" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+  <rect x="28" y="400" width="160" height="42" rx="8" fill="#1e2a1e" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="108" y="416" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#2dd98f" font-weight="600">Redis: realtime</text>
+  <text x="108" y="432" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">pub/sub fan-out</text>
+  <rect x="240" y="400" width="160" height="42" rx="8" fill="#1e2a1e" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="320" y="416" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#2dd98f" font-weight="600">Redis: jobs</text>
+  <text x="320" y="432" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">BullMQ queues</text>
+  <rect x="460" y="400" width="160" height="42" rx="8" fill="#1e2a1e" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="540" y="416" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#2dd98f" font-weight="600">Cloud SQL</text>
+  <text x="540" y="432" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">PostgreSQL 15</text>
+  <line x1="390" y1="352" x2="340" y2="398" stroke="#f7c84e" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+  <line x1="170" y1="296" x2="500" y2="398" stroke="#4f607e" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+</svg>
+</div>
+
+<!-- CONCEPTS -->
+<h2 id="k8s-concepts">Docker Compose → Kubernetes</h2>
+
+<div class="hf-box">
+  <div class="hf-label">Your brain already knows this</div>
+  <p>You know Docker Compose. Kubernetes is the same idea — declare what you want to run, and a control plane makes it happen. The difference: Compose manages one machine. K8s manages a fleet of machines, keeps your declared count alive automatically, rolls out updates with zero downtime, and self-heals when pods crash.</p>
+  <p><strong>Think of a Deployment like a React component spec, and a Pod like an actual rendered instance.</strong> The Deployment says "I want 3 of these." K8s makes sure there are always 3, replacing any that crash.</p>
+</div>
+
+<div class="tw"><table>
+  <tr><th>Docker Compose</th><th>Kubernetes equivalent</th><th>What it actually does</th></tr>
+  <tr><td><code>services:</code> block</td><td><strong>Deployment</strong></td><td>Declares what container to run and how many copies. K8s keeps that count alive automatically — if a pod crashes, a new one starts immediately.</td></tr>
+  <tr><td>one container instance</td><td><strong>Pod</strong></td><td>The smallest unit. One container = one pod (usually). You never talk to pods directly — you talk to Deployments.</td></tr>
+  <tr><td><code>ports: "3000:3000"</code></td><td><strong>Service (ClusterIP)</strong></td><td>A stable internal DNS name + IP for a group of pods. Pods come and go with random IPs — the Service name never changes.</td></tr>
+  <tr><td>Nginx / reverse proxy</td><td><strong>Ingress</strong></td><td>Routes internet traffic by URL path. <code>/api/*</code> → api pods, <code>/ws/*</code> → realtime pods. GKE provisions a real load balancer behind it.</td></tr>
+  <tr><td><code>environment:</code></td><td><strong>ConfigMap</strong></td><td>Non-sensitive config injected as env vars. Safe to reference in scripts — values populated at deploy time.</td></tr>
+  <tr><td><code>.env</code> file</td><td><strong>Secret</strong></td><td>Sensitive credentials. Never commit values — create via CLI only.</td></tr>
+  <tr><td><code>restart: always</code></td><td>built in</td><td>Crashed pods restart automatically. Default behavior — no config needed.</td></tr>
+  <tr><td><code>--scale api=3</code></td><td><strong>HPA</strong></td><td>HorizontalPodAutoscaler — watches CPU/memory and scales replicas automatically.</td></tr>
+  <tr><td>—</td><td><strong>Namespace</strong></td><td>A folder inside the cluster. Keeps prod, staging, and observability isolated.</td></tr>
+  <tr><td>—</td><td><strong>StatefulSet</strong></td><td>Like a Deployment but pods get stable names: <code>realtime-0</code>, <code>realtime-1</code>. Used for realtime so sharding code knows which shard to own.</td></tr>
+</table></div>
+
+<!-- LOCAL SETUP -->
+<h2 id="k8s-setup">Local machine setup</h2>
+<p>Install these once. You'll use <code>kubectl</code> and <code>gcloud</code> every day.</p>
+<div class="cw">
+  <div class="ch"><span class="cf">Install tools</span><span class="cl">bash</span></div>
+  <pre><span class="cc"># Google Cloud CLI</span>
+brew install google-cloud-sdk
+
+<span class="cc"># kubectl — the Kubernetes CLI (like docker CLI but for K8s)</span>
+brew install kubectl
+
+<span class="cc"># k9s — terminal UI for kubectl, highly recommended</span>
+brew install k9s
+
+<span class="cc"># Verify</span>
+gcloud version && kubectl version --client && docker --version</pre>
+</div>
+
+<div class="hf-box">
+  <div class="hf-label">What is k9s?</div>
+  <p>k9s is a full terminal UI showing all your pods, CPU/memory usage, logs, and shell access — all navigable with keyboard shortcuts. <strong>Think of it as React DevTools but for your cluster.</strong> Run <code>k9s</code>, press <code>?</code> for help. You'll use it more than typing raw <code>kubectl</code> commands.</p>
+</div>
+
+<hr>
+
+<!-- PHASE 1 -->
+<h2 id="k8s-gcp"><span class="badge">1</span> GCP project setup</h2>
+<p>Do this once. Creates the project and enables every GCP API your infrastructure will use.</p>
+<div class="cw">
+  <div class="ch"><span class="cf">Initial GCP setup</span><span class="cl">bash</span></div>
+  <pre><span class="cc"># Authenticate with Google</span>
+gcloud auth login
+
+<span class="cc"># Create project (or use existing)</span>
+gcloud projects create note-canva-prod --name="Note Canva"
+gcloud config set project note-canva-prod
+
+<span class="cc"># Enable APIs — do this once, takes ~30s</span>
+gcloud services enable \
+  container.googleapis.com \
+  sqladmin.googleapis.com \
+  redis.googleapis.com \
+  artifactregistry.googleapis.com \
+  secretmanager.googleapis.com \
+  compute.googleapis.com
+
+gcloud config set compute/region europe-west1</pre>
+</div>
+
+<h2 id="k8s-cluster"><span class="badge">2</span> Create the GKE cluster</h2>
+<p>Use Autopilot mode — GCP manages the underlying VMs. You describe what you want to run, GCP provisions nodes and bills you for what your pods actually consume.</p>
+<div class="cw">
+  <div class="ch"><span class="cf">Create cluster (~5 minutes)</span><span class="cl">bash</span></div>
+  <pre>gcloud container clusters create-auto note-canva \
+  --region europe-west1 \
+  --project note-canva-prod
+
+<span class="cc"># Write credentials to ~/.kube/config</span>
+gcloud container clusters get-credentials note-canva \
+  --region europe-west1
+
+<span class="cc"># Confirm</span>
+kubectl cluster-info
+kubectl config current-context
+<span class="cc"># → gke_note-canva-prod_europe-west1_note-canva</span></pre>
+</div>
+
+<h2 id="k8s-services"><span class="badge">3</span> Cloud SQL + Memorystore</h2>
+<p>PostgreSQL and Redis run as managed GCP services outside the cluster. GCP handles backups, failover, and patching. You just connect.</p>
+<div class="cw">
+  <div class="ch"><span class="cf">Cloud SQL — PostgreSQL 15</span><span class="cl">bash</span></div>
+  <pre>gcloud sql instances create note-canva-db \
+  --database-version=POSTGRES_15 \
+  --tier=db-g1-small \
+  --region=europe-west1 \
+  --storage-type=SSD \
+  --storage-size=20GB \
+  --backup-start-time=02:00 \
+  --enable-point-in-time-recovery \
+  --retained-backups-count=14
+
+gcloud sql databases create notecanva --instance=note-canva-db
+gcloud sql users create api_user \
+  --instance=note-canva-db \
+  --password=CHOOSE_A_STRONG_PASSWORD_HERE</pre>
+</div>
+<div class="cw">
+  <div class="ch"><span class="cf">Memorystore Redis ×2</span><span class="cl">bash</span></div>
+  <pre><span class="cc"># Realtime pub/sub — latency-critical</span>
+gcloud redis instances create redis-realtime \
+  --size=1 --region=europe-west1 \
+  --tier=STANDARD_HA --redis-version=redis_7_0
+
+<span class="cc"># BullMQ job queues — kept separate deliberately</span>
+gcloud redis instances create redis-jobs \
+  --size=1 --region=europe-west1 \
+  --tier=STANDARD_HA --redis-version=redis_7_0</pre>
+</div>
+<div class="note warn">
+  <span class="nl">Why two separate Redis instances?</span>
+  <p>Same reason you don't run your main thread and a Web Worker in the same thread. BullMQ queues can spike under load — if they share Redis with your realtime pub/sub, a flood of queued jobs adds latency to every WebSocket message. Separate instances = isolated failure domains.</p>
+</div>
+
+<h2 id="k8s-registry"><span class="badge">4</span> Artifact Registry — your Docker image store</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Create image registry</span><span class="cl">bash</span></div>
+  <pre>gcloud artifacts repositories create note-canva \
+  --repository-format=docker \
+  --location=europe-west1
+
+gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+<span class="cc"># Image URL pattern:</span>
+<span class="cc"># europe-west1-docker.pkg.dev/note-canva-prod/note-canva/api:TAG</span></pre>
+</div>
+
+<hr>
+
+<!-- PHASE 2 -->
+<h2 id="k8s-config-phil"><span class="badge g">2</span> Config philosophy — what goes where</h2>
+
+<div class="hf-box">
+  <div class="hf-label">The one rule you need</div>
+  <p><strong>If this value leaked publicly, would you need to rotate credentials?</strong> Yes → Secret. No → ConfigMap.</p>
+  <p>Never put a password and a hostname in the same object. Never embed a password inside a connection URL string — you can't rotate just the password without rebuilding the whole string. Keep them separate.</p>
+</div>
+
+<div class="tw"><table>
+  <tr><th>ConfigMap — safe to reference in scripts</th><th>Secret — CLI only, never committed</th></tr>
+  <tr><td><code>NODE_ENV=production</code>, <code>LOG_LEVEL=info</code></td><td><code>DB_PASSWORD</code></td></tr>
+  <tr><td><code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_NAME</code>, <code>DB_USER</code></td><td><code>JWT_SECRET</code></td></tr>
+  <tr><td><code>REDIS_REALTIME_HOST</code>, <code>REDIS_JOBS_HOST</code></td><td><code>SENDGRID_API_KEY</code></td></tr>
+  <tr><td><code>WORKER_PREVIEW_CONCURRENCY=8</code></td><td><code>REDIS_AUTH</code> (if Redis auth enabled)</td></tr>
+</table></div>
+
+<h2 id="k8s-namespaces"><span class="badge g">2</span> Create namespaces</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">k8s/namespaces.yaml</span><span class="cl">yaml</span></div>
+  <pre><span class="ck">apiVersion</span>: <span class="cv">v1</span>
+<span class="ck">kind</span>: <span class="cv">Namespace</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">prod</span>
+---
+<span class="ck">apiVersion</span>: <span class="cv">v1</span>
+<span class="ck">kind</span>: <span class="cv">Namespace</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">staging</span>
+---
+<span class="ck">apiVersion</span>: <span class="cv">v1</span>
+<span class="ck">kind</span>: <span class="cv">Namespace</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">observability</span></pre>
+</div>
+<div class="cw"><div class="ch"><span class="cf">Apply</span><span class="cl">bash</span></div><pre>kubectl apply -f k8s/namespaces.yaml</pre></div>
+
+<h2 id="k8s-configmap"><span class="badge g">2</span> ConfigMap — GCP IPs fetched at deploy time</h2>
+<p>Redis and DB host values are private IPs that live in GCP. A script fetches them live from GCP at deploy time and writes them into K8s. Your repo contains the script — not the values.</p>
+<div class="cw">
+  <div class="ch"><span class="cf">scripts/configure-cluster.sh</span><span class="cl">bash</span></div>
+  <pre><span class="cc">#!/bin/bash</span>
+set -e
+PROJECT=note-canva-prod
+REGION=europe-west1
+
+DB_HOST=$(gcloud sql instances describe note-canva-db \
+  --project=$PROJECT --format='value(ipAddresses[0].ipAddress)')
+
+REDIS_REALTIME_HOST=$(gcloud redis instances describe redis-realtime \
+  --region=$REGION --project=$PROJECT --format='value(host)')
+
+REDIS_JOBS_HOST=$(gcloud redis instances describe redis-jobs \
+  --region=$REGION --project=$PROJECT --format='value(host)')
+
+kubectl create configmap backend-config \
+  --namespace=prod \
+  --from-literal=NODE_ENV=production \
+  --from-literal=LOG_LEVEL=info \
+  --from-literal=DB_HOST=$DB_HOST \
+  --from-literal=DB_PORT=5432 \
+  --from-literal=DB_NAME=notecanva \
+  --from-literal=DB_USER=api_user \
+  --from-literal=REDIS_REALTIME_HOST=$REDIS_REALTIME_HOST \
+  --from-literal=REDIS_JOBS_HOST=$REDIS_JOBS_HOST \
+  --from-literal=REDIS_PORT=6379 \
+  --from-literal=WORKER_PREVIEW_CONCURRENCY=8 \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+echo "ConfigMap updated ✓"</pre>
+</div>
+
+<h2 id="k8s-secrets"><span class="badge g">2</span> Secrets — per-service, created via CLI</h2>
+<p>Each service gets only the secrets it actually needs. API never sees <code>SENDGRID_API_KEY</code>. Worker never sees <code>JWT_SECRET</code>. Least-privilege: a compromised service can't leak unrelated credentials.</p>
+<div class="cw">
+  <div class="ch"><span class="cf">scripts/create-secrets.sh</span><span class="cl">bash</span></div>
+  <pre><span class="cc">#!/bin/bash</span>
+<span class="cc"># Values entered interactively — never stored in this file</span>
+read -s -p "DB_PASSWORD: " DB_PASS;   echo
+read -s -p "JWT_SECRET: "  JWT;       echo
+read -s -p "SENDGRID_KEY: " SENDGRID; echo
+
+kubectl create secret generic api-secrets --namespace=prod \
+  --from-literal=DB_PASSWORD=$DB_PASS \
+  --from-literal=JWT_SECRET=$JWT \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl create secret generic worker-secrets --namespace=prod \
+  --from-literal=DB_PASSWORD=$DB_PASS \
+  --from-literal=SENDGRID_API_KEY=$SENDGRID \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl create secret generic realtime-secrets --namespace=prod \
+  --from-literal=JWT_SECRET=$JWT \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+echo "Secrets created ✓"</pre>
+</div>
+
+<h2 id="k8s-dns"><span class="badge g">2</span> Service DNS — pods find each other by name</h2>
+<p>Kubernetes runs an internal DNS server (CoreDNS). Every Service gets a DNS name automatically. Use names, never IPs — pod IPs change on every restart.</p>
+
+<div class="diagram-wrap">
+<svg width="100%" viewBox="0 0 780 280" role="img">
+  <defs>
+    <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="20" y="20" width="470" height="240" rx="14" fill="none" stroke="#2d364f" stroke-width="1" stroke-dasharray="6 4"/>
+  <text x="36" y="42" font-family="JetBrains Mono,monospace" font-size="11" fill="#4f607e">Kubernetes cluster — namespace: prod</text>
+  <rect x="160" y="56" width="180" height="40" rx="8" fill="#152640" stroke="#4d9eff" stroke-width="0.8"/>
+  <text x="250" y="71" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#4d9eff" font-weight="600">CoreDNS</text>
+  <text x="250" y="87" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">internal DNS server</text>
+  <rect x="40" y="138" width="140" height="40" rx="8" fill="#0d2e1c" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="110" y="153" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#2dd98f" font-weight="600">api pod</text>
+  <text x="110" y="169" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">app=api</text>
+  <rect x="240" y="138" width="140" height="40" rx="8" fill="#1a3660" stroke="#4d9eff" stroke-width="0.8"/>
+  <text x="310" y="153" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#4d9eff" font-weight="600">Service: api</text>
+  <text x="310" y="169" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">ClusterIP · port 80</text>
+  <line x1="250" y1="96" x2="180" y2="136" stroke="#4d9eff" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arr2)"/>
+  <line x1="250" y1="96" x2="310" y2="136" stroke="#4d9eff" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arr2)"/>
+  <text x="310" y="208" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#2dd98f">api</text>
+  <text x="310" y="224" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#2dd98f">api.prod</text>
+  <text x="310" y="240" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#2dd98f">api.prod.svc.cluster.local</text>
+  <rect x="530" y="56" width="220" height="200" rx="12" fill="none" stroke="#2d364f" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="640" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">GCP managed (external)</text>
+  <rect x="550" y="90" width="180" height="40" rx="8" fill="#1e2a1e" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="640" y="110" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#2dd98f" font-weight="600">Cloud SQL</text>
+  <rect x="550" y="152" width="180" height="40" rx="8" fill="#1e2a1e" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="640" y="172" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#2dd98f" font-weight="600">Memorystore Redis</text>
+  <text x="640" y="220" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#f7c84e">IPs injected by configure-cluster.sh</text>
+</svg>
+</div>
+
+<hr>
+
+<!-- PHASE 3 -->
+<h2 id="k8s-folder"><span class="badge y">3</span> k8s/ folder structure</h2>
+<div class="ft">
+<span class="d">k8s/</span>
+├── <span class="d">namespaces.yaml</span>               <span class="n">← prod, staging, observability</span>
+└── <span class="d">prod/</span>
+    ├── api-deployment.yaml        <span class="n">← Deployment + Service</span>
+    ├── realtime-statefulset.yaml  <span class="n">← StatefulSet + Service (stable pod names)</span>
+    ├── worker-deployment.yaml     <span class="n">← Deployment only (no Service — pulls from queue)</span>
+    ├── ingress.yaml               <span class="n">← external routing + TLS cert</span>
+    ├── hpa.yaml                   <span class="n">← autoscaling rules</span>
+    └── pdb.yaml                   <span class="n">← disruption budgets</span>
+<span class="d">scripts/</span>
+├── configure-cluster.sh           <span class="n">← fetches GCP IPs → ConfigMap</span>
+├── create-secrets.sh              <span class="n">← interactive secret creation</span>
+└── deploy-first-time.sh           <span class="n">← applies everything in order</span>
+</div>
+
+<h2 id="k8s-api"><span class="badge y">3</span> api service</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">k8s/prod/api-deployment.yaml</span><span class="cl">yaml</span></div>
+  <pre><span class="ck">apiVersion</span>: <span class="cv">apps/v1</span>
+<span class="ck">kind</span>: <span class="cv">Deployment</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">api</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">replicas</span>: <span class="cv">2</span>
+  <span class="ck">selector</span>:
+    <span class="ck">matchLabels</span>:
+      <span class="ck">app</span>: <span class="cv">api</span>
+  <span class="ck">strategy</span>:
+    <span class="ck">type</span>: <span class="cv">RollingUpdate</span>
+    <span class="ck">rollingUpdate</span>:
+      <span class="ck">maxUnavailable</span>: <span class="cv">0</span>   <span class="cc"># never kill a pod before new one is ready — zero downtime</span>
+      <span class="ck">maxSurge</span>: <span class="cv">1</span>         <span class="cc"># spin up 1 extra pod during rollout</span>
+  <span class="ck">template</span>:
+    <span class="ck">metadata</span>:
+      <span class="ck">labels</span>:
+        <span class="ck">app</span>: <span class="cv">api</span>
+    <span class="ck">spec</span>:
+      <span class="ck">terminationGracePeriodSeconds</span>: <span class="cv">30</span>
+      <span class="ck">containers</span>:
+        - <span class="ck">name</span>: <span class="cv">api</span>
+          <span class="ck">image</span>: <span class="cv">europe-west1-docker.pkg.dev/note-canva-prod/note-canva/api:latest</span>
+          <span class="ck">ports</span>:
+            - <span class="ck">containerPort</span>: <span class="cv">8080</span>
+          <span class="ck">envFrom</span>:
+            - <span class="ck">configMapRef</span>:
+                <span class="ck">name</span>: <span class="cv">backend-config</span>
+            - <span class="ck">secretRef</span>:
+                <span class="ck">name</span>: <span class="cv">api-secrets</span>
+          <span class="ck">env</span>:
+            - <span class="ck">name</span>: <span class="cv">POD_NAME</span>
+              <span class="ck">valueFrom</span>:
+                <span class="ck">fieldRef</span>:
+                  <span class="ck">fieldPath</span>: <span class="cv">metadata.name</span>
+          <span class="ck">resources</span>:
+            <span class="ck">requests</span>:
+              <span class="ck">cpu</span>: <span class="cs">"250m"</span>    <span class="cc"># 0.25 cores — guaranteed minimum</span>
+              <span class="ck">memory</span>: <span class="cs">"512Mi"</span>
+            <span class="ck">limits</span>:
+              <span class="ck">cpu</span>: <span class="cs">"1000m"</span>  <span class="cc"># 1 core — throttled if exceeded</span>
+              <span class="ck">memory</span>: <span class="cs">"1Gi"</span>  <span class="cc"># OOMKilled if exceeded</span>
+          <span class="ck">readinessProbe</span>:
+            <span class="ck">httpGet</span>:
+              <span class="ck">path</span>: <span class="cv">/healthz</span>
+              <span class="ck">port</span>: <span class="cv">8080</span>
+            <span class="ck">initialDelaySeconds</span>: <span class="cv">5</span>
+            <span class="ck">periodSeconds</span>: <span class="cv">10</span>
+            <span class="ck">failureThreshold</span>: <span class="cv">3</span>
+          <span class="ck">livenessProbe</span>:
+            <span class="ck">httpGet</span>:
+              <span class="ck">path</span>: <span class="cv">/livez</span>
+              <span class="ck">port</span>: <span class="cv">8080</span>
+            <span class="ck">initialDelaySeconds</span>: <span class="cv">15</span>
+            <span class="ck">periodSeconds</span>: <span class="cv">20</span>
+            <span class="ck">failureThreshold</span>: <span class="cv">3</span>
+---
+<span class="ck">apiVersion</span>: <span class="cv">v1</span>
+<span class="ck">kind</span>: <span class="cv">Service</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">api</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">selector</span>:
+    <span class="ck">app</span>: <span class="cv">api</span>
+  <span class="ck">ports</span>:
+    - <span class="ck">port</span>: <span class="cv">80</span>
+      <span class="ck">targetPort</span>: <span class="cv">8080</span>
+  <span class="ck">type</span>: <span class="cv">ClusterIP</span></pre>
+</div>
+
+<div class="hf-box">
+  <div class="hf-label">Readiness vs Liveness — they're different!</div>
+  <p><strong>readinessProbe</strong> = "am I ready to receive traffic?" K8s won't send requests to a pod until this passes. Check your DB connection here. If DB is down → return 503 → K8s routes around this pod.</p>
+  <p><strong>livenessProbe</strong> = "am I still alive at all?" K8s restarts the pod if this fails 3× in a row. Keep this dead simple — never check external deps. A slow DB shouldn't cause a pod restart.</p>
+</div>
+
+<div class="cw">
+  <div class="ch"><span class="cf">src/routes/health.ts</span><span class="cl">typescript</span></div>
+  <pre><span class="cc">// readiness: checks DB — if DB is unreachable, stop routing here</span>
+app.get('/healthz', async (req, res) => {
+  try {
+    await db.query('SELECT 1')
+    res.json({ status: 'ok', pod: process.env.POD_NAME })
+  } catch {
+    res.status(503).json({ status: 'db_unreachable' })
+  }
+})
+
+<span class="cc">// liveness: always returns ok — just proves the process is alive</span>
+app.get('/livez', (_req, res) => {
+  res.json({ status: 'alive' })
+})</pre>
+</div>
+
+<h2 id="k8s-realtime"><span class="badge y">3</span> realtime service (StatefulSet)</h2>
+<p>Uses a <strong>StatefulSet</strong> instead of a Deployment. StatefulSet pods get stable, predictable names — <code>realtime-0</code>, <code>realtime-1</code> — that survive restarts. Your sharding code reads the ordinal from <code>HOSTNAME</code>, which Kubernetes sets automatically.</p>
+<div class="cw">
+  <div class="ch"><span class="cf">k8s/prod/realtime-statefulset.yaml (key parts)</span><span class="cl">yaml</span></div>
+  <pre><span class="ck">apiVersion</span>: <span class="cv">apps/v1</span>
+<span class="ck">kind</span>: <span class="cv">StatefulSet</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">realtime</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">serviceName</span>: <span class="cv">realtime</span>
+  <span class="ck">replicas</span>: <span class="cv">2</span>
+  <span class="ck">template</span>:
+    <span class="ck">spec</span>:
+      <span class="ck">terminationGracePeriodSeconds</span>: <span class="cv">30</span>
+      <span class="ck">containers</span>:
+        - <span class="ck">name</span>: <span class="cv">realtime</span>
+          <span class="ck">image</span>: <span class="cv">europe-west1-docker.pkg.dev/note-canva-prod/note-canva/realtime:latest</span>
+          <span class="ck">env</span>:
+            <span class="cc"># HOSTNAME is set automatically: "realtime-0", "realtime-1" etc.</span>
+            <span class="cc"># DO NOT declare it — just read it in your code</span>
+            - <span class="ck">name</span>: <span class="cv">TOTAL_REALTIME_PODS</span>
+              <span class="ck">value</span>: <span class="cs">"2"</span>   <span class="cc"># keep in sync with replicas</span>
+          <span class="ck">resources</span>:
+            <span class="ck">requests</span>: { <span class="ck">cpu</span>: <span class="cs">"300m"</span>, <span class="ck">memory</span>: <span class="cs">"512Mi"</span> }
+            <span class="ck">limits</span>:   { <span class="ck">cpu</span>: <span class="cs">"1500m"</span>, <span class="ck">memory</span>: <span class="cs">"1Gi"</span> }</pre>
+</div>
+
+<h2 id="k8s-worker"><span class="badge y">3</span> worker service</h2>
+<p>No Service object — worker pods pull jobs from Redis queues, they don't receive inbound traffic. Note the longer <code>terminationGracePeriodSeconds: 60</code> — workers need extra time to finish in-progress jobs.</p>
+
+<h2 id="k8s-ingress"><span class="badge y">3</span> Ingress + TLS</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">k8s/prod/ingress.yaml</span><span class="cl">yaml</span></div>
+  <pre><span class="ck">apiVersion</span>: <span class="cv">networking.k8s.io/v1</span>
+<span class="ck">kind</span>: <span class="cv">Ingress</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">note-canva-ingress</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+  <span class="ck">annotations</span>:
+    <span class="ck">kubernetes.io/ingress.class</span>: <span class="cs">"gce"</span>
+    <span class="ck">networking.gke.io/managed-certificates</span>: <span class="cs">"note-canva-cert"</span>
+    <span class="ck">kubernetes.io/ingress.allow-http</span>: <span class="cs">"false"</span>
+<span class="ck">spec</span>:
+  <span class="ck">rules</span>:
+    - <span class="ck">host</span>: <span class="cv">api.note-canva.com</span>
+      <span class="ck">http</span>:
+        <span class="ck">paths</span>:
+          - <span class="ck">path</span>: <span class="cv">/api</span>
+            <span class="ck">pathType</span>: <span class="cv">Prefix</span>
+            <span class="ck">backend</span>:
+              <span class="ck">service</span>:
+                <span class="ck">name</span>: <span class="cv">api</span>
+                <span class="ck">port</span>: { <span class="ck">number</span>: <span class="cv">80</span> }
+          - <span class="ck">path</span>: <span class="cv">/ws</span>
+            <span class="ck">pathType</span>: <span class="cv">Prefix</span>
+            <span class="ck">backend</span>:
+              <span class="ck">service</span>:
+                <span class="ck">name</span>: <span class="cv">realtime</span>
+                <span class="ck">port</span>: { <span class="ck">number</span>: <span class="cv">80</span> }
+---
+<span class="cc"># Google provisions and auto-renews this TLS cert</span>
+<span class="ck">apiVersion</span>: <span class="cv">networking.gke.io/v1</span>
+<span class="ck">kind</span>: <span class="cv">ManagedCertificate</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">note-canva-cert</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">domains</span>:
+    - <span class="cv">api.note-canva.com</span></pre>
+</div>
+
+<h2 id="k8s-hpa"><span class="badge y">3</span> HPA + PodDisruptionBudget</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">k8s/prod/hpa.yaml</span><span class="cl">yaml</span></div>
+  <pre><span class="ck">apiVersion</span>: <span class="cv">autoscaling/v2</span>
+<span class="ck">kind</span>: <span class="cv">HorizontalPodAutoscaler</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">api-hpa</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">scaleTargetRef</span>:
+    <span class="ck">apiVersion</span>: <span class="cv">apps/v1</span>
+    <span class="ck">kind</span>: <span class="cv">Deployment</span>
+    <span class="ck">name</span>: <span class="cv">api</span>
+  <span class="ck">minReplicas</span>: <span class="cv">2</span>    <span class="cc"># always at least 2 — never a SPOF</span>
+  <span class="ck">maxReplicas</span>: <span class="cv">20</span>
+  <span class="ck">metrics</span>:
+    - <span class="ck">type</span>: <span class="cv">Resource</span>
+      <span class="ck">resource</span>:
+        <span class="ck">name</span>: <span class="cv">cpu</span>
+        <span class="ck">target</span>:
+          <span class="ck">type</span>: <span class="cv">Utilization</span>
+          <span class="ck">averageUtilization</span>: <span class="cv">60</span>  <span class="cc"># scale up when avg CPU hits 60%</span></pre>
+</div>
+<div class="cw">
+  <div class="ch"><span class="cf">k8s/prod/pdb.yaml</span><span class="cl">yaml</span></div>
+  <pre><span class="cc"># Always keep at least 1 healthy pod — even during rolling deploys or node drains</span>
+<span class="ck">apiVersion</span>: <span class="cv">policy/v1</span>
+<span class="ck">kind</span>: <span class="cv">PodDisruptionBudget</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">api-pdb</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">minAvailable</span>: <span class="cv">1</span>
+  <span class="ck">selector</span>:
+    <span class="ck">matchLabels</span>:
+      <span class="ck">app</span>: <span class="cv">api</span></pre>
+</div>
+
+<hr>
+
+<!-- PHASE 4 -->
+<h2 id="k8s-build"><span class="badge p">4</span> Build &amp; push images</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Build and push all three images</span><span class="cl">bash</span></div>
+  <pre>REGISTRY=europe-west1-docker.pkg.dev/note-canva-prod/note-canva
+TAG=$(git rev-parse --short HEAD)   <span class="cc"># git SHA — unique per commit, auditable forever</span>
+
+docker build -f Dockerfile.api      -t $REGISTRY/api:$TAG      -t $REGISTRY/api:latest      .
+docker build -f Dockerfile.realtime -t $REGISTRY/realtime:$TAG -t $REGISTRY/realtime:latest .
+docker build -f Dockerfile.worker   -t $REGISTRY/worker:$TAG   -t $REGISTRY/worker:latest   .
+
+docker push $REGISTRY/api:$TAG      && docker push $REGISTRY/api:latest
+docker push $REGISTRY/realtime:$TAG && docker push $REGISTRY/realtime:latest
+docker push $REGISTRY/worker:$TAG   && docker push $REGISTRY/worker:latest</pre>
+</div>
+
+<h2 id="k8s-apply"><span class="badge p">4</span> Apply manifests — first time</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">scripts/deploy-first-time.sh</span><span class="cl">bash</span></div>
+  <pre><span class="cc">#!/bin/bash</span>
+set -e
+echo "Context: $(kubectl config current-context)"
+
+kubectl apply -f k8s/namespaces.yaml
+./scripts/configure-cluster.sh    <span class="cc"># fetches GCP IPs → ConfigMap</span>
+./scripts/create-secrets.sh       <span class="cc"># prompts for passwords</span>
+kubectl apply -f k8s/prod/api-deployment.yaml
+kubectl apply -f k8s/prod/realtime-statefulset.yaml
+kubectl apply -f k8s/prod/worker-deployment.yaml
+kubectl apply -f k8s/prod/ingress.yaml
+kubectl apply -f k8s/prod/pdb.yaml
+kubectl apply -f k8s/prod/hpa.yaml
+
+kubectl get pods -n prod --watch</pre>
+</div>
+
+<h2 id="k8s-verify"><span class="badge p">4</span> Verify everything is running</h2>
+<div class="term">
+  <div class="tbar"><div class="tdot" style="background:#ff5f57"></div><div class="tdot" style="background:#febc2e"></div><div class="tdot" style="background:#28c840"></div><span class="ttl">verification</span></div>
+  <pre><span class="p">$</span> <span class="c">kubectl get pods -n prod</span>
+<span class="o">NAME                       READY   STATUS    RESTARTS   AGE</span>
+<span class="ok">api-7d9f8b-xkp2z           1/1     Running   0          2m</span>
+<span class="ok">api-7d9f8b-mn4qr           1/1     Running   0          2m</span>
+<span class="ok">realtime-0                 1/1     Running   0          2m</span>
+<span class="ok">realtime-1                 1/1     Running   0          2m</span>
+<span class="ok">worker-5c8d9f-zt7lx        1/1     Running   0          2m</span>
+
+<span class="p">$</span> <span class="c">kubectl get ingress -n prod</span>
+<span class="ok">note-canva-ingress   api.note-canva.com   34.111.x.x   443</span>
+<span class="o">                                          ↑ point your DNS A record here</span>
+
+<span class="p">$</span> <span class="c">kubectl get hpa -n prod</span>
+<span class="ok">api-hpa    Deployment/api    12%/60%   2   20   2</span>
+<span class="ok">worker-hpa Deployment/worker  5%/70%   1   30   1</span></pre>
+</div>
+
+<div class="tw"><table>
+  <tr><th>Status</th><th>Meaning</th><th>What to do</th></tr>
+  <tr><td><code>1/1 Running</code></td><td>Alive, readiness probe passing, receiving traffic</td><td>Nothing ✓</td></tr>
+  <tr><td><code>0/1 Running</code></td><td>Alive but readiness probe failing — not receiving traffic</td><td>Check <code>/healthz</code> — is DB reachable?</td></tr>
+  <tr><td><code>CrashLoopBackOff</code></td><td>Crashes on startup, K8s keeps retrying</td><td><code>kubectl logs POD --previous</code></td></tr>
+  <tr><td><code>Pending</code></td><td>Waiting for cluster capacity</td><td><code>kubectl describe pod POD</code> → Events</td></tr>
+  <tr><td><code>OOMKilled</code></td><td>Exceeded memory limit</td><td>Raise <code>limits.memory</code> in YAML</td></tr>
+  <tr><td><code>ImagePullBackOff</code></td><td>Can't pull the image</td><td>Wrong tag? Artifact Registry auth?</td></tr>
+</table></div>
+
+<h2 id="k8s-shutdown"><span class="badge p">4</span> Graceful shutdown — required in every service</h2>
+<div class="hf-box">
+  <div class="hf-label">Don't skip this</div>
+  <p>When K8s stops a pod — during a deploy, scale-down, or node drain — it sends <code>SIGTERM</code>. If you ignore it, in-flight requests and jobs get dropped mid-execution. This is the backend equivalent of not cleaning up event listeners before unmounting a React component.</p>
+</div>
+<div class="cw">
+  <div class="ch"><span class="cf">src/api/index.ts + src/worker/index.ts</span><span class="cl">typescript</span></div>
+  <pre><span class="cc">// API: stop accepting connections, drain in-flight requests</span>
+process.on('SIGTERM', async () => {
+  server.close()
+  await new Promise(r => setTimeout(r, 25_000))  <span class="cc">// let requests finish</span>
+  await db.end()
+  process.exit(0)
+})
+
+<span class="cc">// Worker: pause queue consumption, finish current jobs</span>
+process.on('SIGTERM', async () => {
+  await previewWorker.pause()
+  await mailWorker.pause()
+  await Promise.all([previewWorker.close(), mailWorker.close()])
+  process.exit(0)
+})</pre>
+</div>
+
+<hr>
+
+<!-- PHASE 5 -->
+<h2 id="k8s-cicd"><span class="badge r">5</span> GitHub CI/CD — how it works</h2>
+<div class="flow">
+  <div class="fi"><div class="fl"><div class="fd"></div><div class="fs"></div></div><div class="fb"><strong>Push to main</strong><p>GitHub Actions triggers on every push or PR merge to <code>main</code>.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd"></div><div class="fs"></div></div><div class="fb"><strong>Build all three Docker images</strong><p>Tagged with the full git commit SHA — unique per commit, auditable forever.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd"></div><div class="fs"></div></div><div class="fb"><strong>Push to Artifact Registry</strong><p>Auth via Workload Identity Federation — no service account key files to rotate or leak.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd"></div><div class="fs"></div></div><div class="fb"><strong>kubectl set image</strong><p>Updates each Deployment to the new SHA tag. K8s starts rolling update: one new pod starts, passes readiness probe, then one old pod stops.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd"></div><div class="fs"></div></div><div class="fb"><strong>Wait for rollout</strong><p><code>kubectl rollout status</code> blocks until all pods are healthy. Workflow fails if it takes more than 5 minutes.</p></div></div>
+</div>
+
+<h2 id="k8s-wif"><span class="badge r">5</span> Workload Identity Federation setup</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Run once — sets up keyless GitHub → GCP auth</span><span class="cl">bash</span></div>
+  <pre>gcloud iam service-accounts create github-actions \
+  --project=note-canva-prod
+
+gcloud projects add-iam-policy-binding note-canva-prod \
+  --member="serviceAccount:github-actions@note-canva-prod.iam.gserviceaccount.com" \
+  --role="roles/artifactregistry.writer"
+
+gcloud projects add-iam-policy-binding note-canva-prod \
+  --member="serviceAccount:github-actions@note-canva-prod.iam.gserviceaccount.com" \
+  --role="roles/container.developer"
+
+gcloud iam workload-identity-pools create github-pool \
+  --project=note-canva-prod --location=global
+
+gcloud iam workload-identity-pools providers create-oidc github-provider \
+  --project=note-canva-prod --location=global \
+  --workload-identity-pool=github-pool \
+  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository" \
+  --issuer-uri="https://token.actions.githubusercontent.com" \
+  --attribute-condition="assertion.repository=='YOUR_ORG/YOUR_REPO'"
+
+POOL=$(gcloud iam workload-identity-pools describe github-pool \
+  --project=note-canva-prod --location=global --format="value(name)")
+
+gcloud iam service-accounts add-iam-policy-binding \
+  github-actions@note-canva-prod.iam.gserviceaccount.com \
+  --project=note-canva-prod \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/${POOL}/attribute.repository/YOUR_ORG/YOUR_REPO"</pre>
+</div>
+
+<h2 id="k8s-workflow"><span class="badge r">5</span> GitHub Actions workflow</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">.github/workflows/deploy.yml</span><span class="cl">yaml</span></div>
+  <pre><span class="ck">name</span>: <span class="cv">Deploy to GKE</span>
+<span class="ck">on</span>:
+  <span class="ck">push</span>:
+    <span class="ck">branches</span>: [<span class="cv">main</span>]
+<span class="ck">env</span>:
+  <span class="ck">REGISTRY</span>: <span class="cv">europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/note-canva</span>
+<span class="ck">jobs</span>:
+  <span class="ck">deploy</span>:
+    <span class="ck">runs-on</span>: <span class="cv">ubuntu-latest</span>
+    <span class="ck">permissions</span>:
+      <span class="ck">contents</span>: <span class="cv">read</span>
+      <span class="ck">id-token</span>: <span class="cv">write</span>
+    <span class="ck">steps</span>:
+      - <span class="ck">uses</span>: <span class="cv">actions/checkout@v4</span>
+      - <span class="ck">name</span>: <span class="cv">Auth to GCP</span>
+        <span class="ck">uses</span>: <span class="cv">google-github-actions/auth@v2</span>
+        <span class="ck">with</span>:
+          <span class="ck">workload_identity_provider</span>: <span class="cs">${{ secrets.WIF_PROVIDER }}</span>
+          <span class="ck">service_account</span>: <span class="cs">${{ secrets.WIF_SERVICE_ACCOUNT }}</span>
+      - <span class="ck">uses</span>: <span class="cv">google-github-actions/setup-gcloud@v2</span>
+      - <span class="ck">name</span>: <span class="cv">Configure Docker</span>
+        <span class="ck">run</span>: <span class="cv">gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet</span>
+      - <span class="ck">uses</span>: <span class="cv">google-github-actions/get-gke-credentials@v2</span>
+        <span class="ck">with</span>:
+          <span class="ck">cluster_name</span>: <span class="cs">${{ secrets.GKE_CLUSTER_NAME }}</span>
+          <span class="ck">location</span>: <span class="cs">${{ secrets.GCP_REGION }}</span>
+      - <span class="ck">name</span>: <span class="cv">Build &amp; push</span>
+        <span class="ck">run</span>: |
+          TAG=${{ github.sha }}
+          docker build -f Dockerfile.api      -t $REGISTRY/api:$TAG      . && docker push $REGISTRY/api:$TAG
+          docker build -f Dockerfile.realtime -t $REGISTRY/realtime:$TAG . && docker push $REGISTRY/realtime:$TAG
+          docker build -f Dockerfile.worker   -t $REGISTRY/worker:$TAG   . && docker push $REGISTRY/worker:$TAG
+      - <span class="ck">name</span>: <span class="cv">Deploy</span>
+        <span class="ck">run</span>: |
+          TAG=${{ github.sha }}
+          kubectl set image deployment/api       api=$REGISTRY/api:$TAG       -n prod
+          kubectl set image statefulset/realtime realtime=$REGISTRY/realtime:$TAG -n prod
+          kubectl set image deployment/worker    worker=$REGISTRY/worker:$TAG  -n prod
+          kubectl rollout status deployment/api       -n prod --timeout=5m
+          kubectl rollout status statefulset/realtime -n prod --timeout=5m
+          kubectl rollout status deployment/worker    -n prod --timeout=5m</pre>
+</div>
+
+<h2 id="k8s-deploy-flow"><span class="badge r">5</span> What to do for each type of change</h2>
+<div class="tw"><table>
+  <tr><th>Change type</th><th>You do</th><th>What happens</th></tr>
+  <tr><td>Code change</td><td>Push to <code>main</code></td><td>CI/CD builds + deploys, rolling update, zero downtime</td></tr>
+  <tr><td>ConfigMap value</td><td>Run <code>configure-cluster.sh</code>, then <code>kubectl rollout restart deployment/api -n prod</code></td><td>Pods restart one by one to pick up new env vars</td></tr>
+  <tr><td>Secret rotation</td><td>Rotate in GCP first, update K8s Secret via CLI, then <code>kubectl rollout restart</code></td><td>Rolling restart — always at least 1 pod serving</td></tr>
+  <tr><td>Manifest change</td><td><code>kubectl apply -f k8s/prod/api-deployment.yaml</code></td><td>K8s applies diff, rolling update if pod spec changed</td></tr>
+  <tr><td>Emergency rollback</td><td><code>kubectl rollout undo deployment/api -n prod</code></td><td>Previous image tag restored instantly</td></tr>
+</table></div>
+
+<hr>
+
+<!-- PHASE 6 -->
+<h2 id="k8s-contexts"><span class="badge">6</span> kubectl contexts</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Context management</span><span class="cl">bash</span></div>
+  <pre>kubectl config get-contexts
+kubectl config current-context
+kubectl config use-context gke_note-canva-prod_europe-west1_note-canva
+
+<span class="cc"># Add to ~/.zshrc</span>
+alias kp="kubectl config use-context gke_note-canva-prod_europe-west1_note-canva"
+alias ks="kubectl config use-context gke_note-canva-prod_europe-west1_note-canva-staging"
+alias k=kubectl</pre>
+</div>
+<div class="note warn">
+  <span class="nl">Check context before every destructive command</span>
+  <p>The worst ops mistakes happen when you think you're on staging. Before <code>kubectl delete</code>, <code>kubectl scale</code>, or <code>kubectl rollout restart</code> — always run <code>kubectl config current-context</code> first. Make it muscle memory.</p>
+</div>
+
+<h2 id="k8s-ops"><span class="badge">6</span> Common operations</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Daily commands</span><span class="cl">bash</span></div>
+  <pre><span class="cc">━━━ STATUS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl get pods -n prod
+kubectl get pods -n prod -o wide           <span class="cc"># with node + IP</span>
+kubectl get pods -n prod --watch           <span class="cc"># live refresh</span>
+kubectl top pods -n prod                   <span class="cc"># CPU/memory</span>
+kubectl describe deployment api -n prod    <span class="cc"># full details + events</span>
+
+<span class="cc">━━━ LOGS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl logs -l app=api -n prod -f         <span class="cc"># all api pods at once</span>
+kubectl logs POD -n prod --previous        <span class="cc"># crashed pod's last logs</span>
+
+<span class="cc">━━━ EXEC ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl exec -it deployment/api -n prod -- sh
+kubectl exec deployment/api -n prod -- env | sort
+
+<span class="cc">━━━ ROLLOUTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl rollout restart deployment/api -n prod
+kubectl rollout status  deployment/api -n prod
+kubectl rollout undo    deployment/api -n prod
+kubectl rollout history deployment/api -n prod
+kubectl scale deployment/api --replicas=5 -n prod</pre>
+</div>
+
+<h2 id="k8s-debug"><span class="badge">6</span> Debugging a broken pod</h2>
+<div class="term">
+  <div class="tbar"><div class="tdot" style="background:#ff5f57"></div><div class="tdot" style="background:#febc2e"></div><div class="tdot" style="background:#28c840"></div><span class="ttl">debug workflow</span></div>
+  <pre><span class="p">$</span> <span class="c">kubectl get pods -n prod</span>
+<span class="ok">api-7d9f8b-xkp2z     1/1   Running            0   10m</span>
+<span class="er">api-8c9e1f-ab3qz     0/1   CrashLoopBackOff   4    3m</span>
+
+<span class="p">$</span> <span class="c">kubectl logs api-8c9e1f-ab3qz -n prod --previous</span>
+<span class="er">Error: connect ECONNREFUSED 10.20.30.40:5432</span>
+<span class="o">→ Can't reach DB. Check DB_HOST and DB_PASSWORD.</span>
+
+<span class="p">$</span> <span class="c">kubectl exec deployment/api -n prod -- env | grep DB_</span>
+<span class="o">DB_HOST=10.20.30.40</span>
+<span class="o">DB_PORT=5432</span>
+
+<span class="p">$</span> <span class="c">kubectl exec deployment/api -n prod -- sh -c 'echo ${#DB_PASSWORD}'</span>
+<span class="ok">32</span>
+<span class="o">→ length > 0, password is set — check the actual value matches GCP SQL</span></pre>
+</div>
+
+<!-- Troubleshooting SVG diagram -->
+<h2 id="k8s-troubleshoot">Troubleshooting decision tree</h2>
+<div class="diagram-wrap">
+<svg width="100%" viewBox="0 0 780 430" role="img">
+  <defs>
+    <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <!-- Start box -->
+  <rect x="270" y="18" width="240" height="38" rx="8" fill="#1a3660" stroke="#4d9eff" stroke-width="1"/>
+  <text x="390" y="32" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#4d9eff" font-weight="600">kubectl get pods -n prod</text>
+  <text x="390" y="48" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">what status do you see?</text>
+  <!-- branch lines from start -->
+  <line x1="390" y1="56" x2="390" y2="78" stroke="#4d9eff" stroke-width="1" marker-end="url(#arr3)"/>
+  <line x1="390" y1="78" x2="80" y2="78" stroke="#4d9eff" stroke-width="0.8"/>
+  <line x1="390" y1="78" x2="700" y2="78" stroke="#4d9eff" stroke-width="0.8"/>
+  <line x1="80"  y1="78" x2="80"  y2="100" stroke="#f06e6e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <line x1="210" y1="78" x2="210" y2="100" stroke="#f7c84e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <line x1="390" y1="78" x2="390" y2="100" stroke="#4f607e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <line x1="570" y1="78" x2="570" y2="100" stroke="#f06e6e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <line x1="700" y1="78" x2="700" y2="100" stroke="#f7c84e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <!-- Status boxes -->
+  <rect x="22"  y="100" width="115" height="28" rx="6" fill="#3a1212" stroke="#f06e6e" stroke-width="0.8"/>
+  <text x="80"  y="114" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#f06e6e">CrashLoopBackOff</text>
+  <rect x="152" y="100" width="115" height="28" rx="6" fill="#24140a" stroke="#f7c84e" stroke-width="0.8"/>
+  <text x="210" y="114" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#f7c84e">0/1 Running</text>
+  <rect x="330" y="100" width="120" height="28" rx="6" fill="#242a3a" stroke="#4f607e" stroke-width="0.8"/>
+  <text x="390" y="114" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">Pending</text>
+  <rect x="513" y="100" width="115" height="28" rx="6" fill="#3a1212" stroke="#f06e6e" stroke-width="0.8"/>
+  <text x="570" y="114" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#f06e6e">ImagePullBackOff</text>
+  <rect x="643" y="100" width="115" height="28" rx="6" fill="#24140a" stroke="#f7c84e" stroke-width="0.8"/>
+  <text x="700" y="114" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#f7c84e">OOMKilled</text>
+  <!-- solution arrows -->
+  <line x1="80"  y1="128" x2="80"  y2="160" stroke="#f06e6e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <line x1="210" y1="128" x2="210" y2="160" stroke="#f7c84e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <line x1="390" y1="128" x2="390" y2="160" stroke="#4f607e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <line x1="570" y1="128" x2="570" y2="160" stroke="#f06e6e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <line x1="700" y1="128" x2="700" y2="160" stroke="#f7c84e" stroke-width="0.8" marker-end="url(#arr3)"/>
+  <!-- Solution boxes -->
+  <rect x="22"  y="160" width="115" height="50" rx="6" fill="#1a1a2a" stroke="#3a4e6a" stroke-width="0.8"/>
+  <text x="80"  y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">kubectl logs</text>
+  <text x="80"  y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">POD --previous</text>
+  <text x="80"  y="207" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4f607e">app crash on startup</text>
+  <rect x="152" y="160" width="115" height="50" rx="6" fill="#1a1a2a" stroke="#3a4e6a" stroke-width="0.8"/>
+  <text x="210" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">curl pod:8080/healthz</text>
+  <text x="210" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">from inside pod</text>
+  <text x="210" y="207" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4f607e">readiness failing</text>
+  <rect x="330" y="160" width="120" height="50" rx="6" fill="#1a1a2a" stroke="#3a4e6a" stroke-width="0.8"/>
+  <text x="390" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">kubectl describe pod</text>
+  <text x="390" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">→ Events section</text>
+  <text x="390" y="207" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4f607e">Insufficient cpu/mem</text>
+  <rect x="513" y="160" width="115" height="50" rx="6" fill="#1a1a2a" stroke="#3a4e6a" stroke-width="0.8"/>
+  <text x="570" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">kubectl describe pod</text>
+  <text x="570" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">→ "Failed to pull"</text>
+  <text x="570" y="207" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4f607e">wrong tag or auth</text>
+  <rect x="643" y="160" width="115" height="50" rx="6" fill="#1a1a2a" stroke="#3a4e6a" stroke-width="0.8"/>
+  <text x="700" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">raise limits.memory</text>
+  <text x="700" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">in deployment YAML</text>
+  <text x="700" y="207" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4f607e">kubectl apply -f</text>
+  <!-- all running but broken -->
+  <rect x="270" y="300" width="240" height="38" rx="8" fill="#1e2a1e" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="390" y="314" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="12" fill="#2dd98f" font-weight="600">All pods 1/1 Running</text>
+  <text x="390" y="330" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">but app returns errors?</text>
+  <rect x="270" y="368" width="240" height="40" rx="8" fill="#1a1a2a" stroke="#3a4e6a" stroke-width="0.8"/>
+  <text x="390" y="382" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#8899b8">kubectl logs -l app=api</text>
+  <text x="390" y="398" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-size="10" fill="#4f607e">-n prod -f</text>
+  <line x1="390" y1="338" x2="390" y2="366" stroke="#2dd98f" stroke-width="0.8" marker-end="url(#arr3)"/>
+</svg>
+</div>
+
+<h2 id="k8s-rotate"><span class="badge">6</span> Rotating secrets — zero downtime</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Rotate DB password</span><span class="cl">bash</span></div>
+  <pre><span class="cc"># 1. Change password in Cloud SQL first</span>
+gcloud sql users set-password api_user \
+  --instance=note-canva-db \
+  --password=NEW_PASSWORD
+
+<span class="cc"># 2. Update K8s secrets (preserves other keys)</span>
+kubectl create secret generic api-secrets --namespace=prod \
+  --from-literal=DB_PASSWORD=NEW_PASSWORD \
+  --from-literal=JWT_SECRET=$(kubectl get secret api-secrets -n prod \
+    -o jsonpath='{.data.JWT_SECRET}' | base64 -d) \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+<span class="cc"># 3. Rolling restart — at least 1 pod always serving</span>
+kubectl rollout restart deployment/api    -n prod
+kubectl rollout restart deployment/worker -n prod
+
+<span class="cc"># 4. Watch it complete</span>
+kubectl rollout status deployment/api -n prod</pre>
+</div>
+
+<hr>
+
+<!-- PHASE 7 -->
+<h2 id="k8s-console"><span class="badge g">7</span> GCP Console navigation</h2>
+<div class="tw"><table>
+  <tr><th>You want to…</th><th>Go to</th></tr>
+  <tr><td>See pods, status, restart count</td><td><strong>Kubernetes Engine → Workloads</strong></td></tr>
+  <tr><td>Services and cluster IPs</td><td><strong>Kubernetes Engine → Services &amp; Ingress</strong></td></tr>
+  <tr><td>View ConfigMaps and Secrets</td><td><strong>Kubernetes Engine → Config</strong></td></tr>
+  <tr><td>Search logs across all pods</td><td><strong>Logging → Log Explorer</strong></td></tr>
+  <tr><td>CPU/memory graphs</td><td><strong>Monitoring → Dashboards → GKE</strong></td></tr>
+  <tr><td>Redis host IPs</td><td><strong>Memorystore → Redis</strong></td></tr>
+  <tr><td>Query DB in browser</td><td><strong>SQL → instance → Cloud SQL Studio</strong></td></tr>
+  <tr><td>View/restore backups</td><td><strong>SQL → instance → Backups</strong></td></tr>
+  <tr><td>View pushed images</td><td><strong>Artifact Registry → note-canva</strong></td></tr>
+  <tr><td>Browser terminal with gcloud + kubectl</td><td>Click <strong>&gt;_</strong> icon top-right (Cloud Shell)</td></tr>
+</table></div>
+
+<h2 id="k8s-logs"><span class="badge g">7</span> Log Explorer queries</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Logging → Log Explorer</span><span class="cl">text</span></div>
+  <pre><span class="cc">-- All logs from api pods</span>
+resource.type="k8s_container"
+resource.labels.namespace_name="prod"
+labels."k8s-pod/app"="api"
+
+<span class="cc">-- Only errors, all services</span>
+resource.type="k8s_container"
+resource.labels.namespace_name="prod"
+severity>=ERROR
+
+<span class="cc">-- Specific request (if you log requestId)</span>
+resource.type="k8s_container"
+resource.labels.namespace_name="prod"
+jsonPayload.requestId="abc-123-xyz"</pre>
+</div>
+
+<h2 id="k8s-db"><span class="badge g">7</span> Database management</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Cloud SQL CLI reference</span><span class="cl">bash</span></div>
+  <pre><span class="cc"># Open psql shell</span>
+gcloud sql connect note-canva-db --user=api_user --database=notecanva
+
+<span class="cc"># List all backups</span>
+gcloud sql backups list --instance=note-canva-db
+
+<span class="cc"># Restore to a point in time — always restores to a CLONE first</span>
+gcloud sql instances clone note-canva-db note-canva-db-restore \
+  --point-in-time $(date -u -v-1H +%Y-%m-%dT%H:%M:%SZ)</pre>
+</div>
+
+<h2 id="k8s-cheatsheet">kubectl cheatsheet</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Full reference</span><span class="cl">bash</span></div>
+  <pre><span class="cc">━━━ CONTEXT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl config get-contexts
+kubectl config current-context
+kubectl config use-context CONTEXT_NAME
+
+<span class="cc">━━━ PODS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl get pods -n prod
+kubectl get pods -n prod -o wide
+kubectl get pods -n prod --watch
+kubectl top pods -n prod
+kubectl describe pod NAME -n prod
+kubectl delete pod NAME -n prod            <span class="cc"># force restart</span>
+
+<span class="cc">━━━ LOGS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl logs -l app=api -n prod -f
+kubectl logs POD -n prod --previous        <span class="cc"># crashed pod</span>
+
+<span class="cc">━━━ DEPLOYMENTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl rollout restart deployment/api -n prod
+kubectl rollout status  deployment/api -n prod
+kubectl rollout undo    deployment/api -n prod
+kubectl rollout history deployment/api -n prod
+kubectl scale deployment/api --replicas=5 -n prod
+
+<span class="cc">━━━ CONFIG ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl get configmap backend-config -n prod -o yaml
+kubectl get secret api-secrets -n prod -o yaml      <span class="cc"># base64 encoded</span>
+kubectl edit configmap backend-config -n prod       <span class="cc"># live edit</span>
+
+<span class="cc">━━━ APPLY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+kubectl apply -f k8s/prod/api-deployment.yaml
+kubectl apply -f k8s/prod/
+kubectl diff  -f k8s/prod/api-deployment.yaml</pre>
+</div>
+
+<!-- ── K8S INTERVIEW QUESTIONS ── -->
+<hr>
+<h2 id="k8s-interview"><span class="badge g">↗</span> Interview questions — Kubernetes</h2>
+
+<div class="iq">
+  <div class="iq-label">Senior · system design · asked at Spotify, Zalando, Delivery Hero</div>
+  <div class="iq-q">"What's the difference between a Deployment and a StatefulSet, and when would you use each?"</div>
+  <div class="iq-a">A <strong>Deployment</strong> manages stateless pods — they're interchangeable. Pods get random names like <code>api-7d9f8b-xkp2z</code>. When one dies and restarts, it gets a different name and potentially a different node. This is fine for REST APIs where all instances are identical.<br><br>A <strong>StatefulSet</strong> gives pods stable, predictable identities: <code>realtime-0</code>, <code>realtime-1</code>. These names persist across restarts. You use this when pod identity matters — for sharding (pod-0 owns shard 0, pod-1 owns shard 1), for leader election, or for distributed systems that need stable network addresses. The trade-off: StatefulSet rolling updates are sequential (one pod at a time), which is slower but safer for stateful workloads.</div>
+</div>
+
+<div class="iq">
+  <div class="iq-label">Senior · operations · classic pod failure scenario</div>
+  <div class="iq-q">"A pod is in CrashLoopBackOff. Walk me through how you'd debug it."</div>
+  <div class="iq-a"><strong>1.</strong> <code>kubectl logs POD -n prod --previous</code> — the previous flag shows logs from the crashed container instance, before it was restarted. This usually contains the actual error.<br><br><strong>2.</strong> <code>kubectl describe pod POD -n prod</code> — look at the Events section at the bottom. K8s records why it killed the pod (OOMKilled, liveness probe failure, etc.) and what happened before that.<br><br><strong>3.</strong> <code>kubectl exec deployment/api -n prod -- env | grep DB_</code> — if the logs show a connection error, verify the env vars are actually set correctly. Secrets might not have been created or have wrong values.<br><br>The most common root causes in order: wrong env var / missing secret, app failing to connect to DB/Redis on startup, OOMKilled (memory limit too low), bad image tag / image never built.</div>
+</div>
+
+<div class="iq">
+  <div class="iq-label">Mid-level · conceptual · asked constantly</div>
+  <div class="iq-q">"What's the difference between readiness and liveness probes?"</div>
+  <div class="iq-a"><strong>Readiness</strong>: "should K8s send traffic to this pod?" Fails → pod removed from Service load balancer. Used to signal "I'm still starting up" or "my upstream dependency is down." <strong>Check external deps here.</strong><br><br><strong>Liveness</strong>: "is this pod still alive at all?" Fails 3× → pod restarted. Used to detect a deadlock or infinite loop where the process is running but hung. <strong>Never check external deps here</strong> — a slow DB shouldn't restart your pod, it should just stop routing traffic to it.</div>
+</div>
+
+<div class="iq">
+  <div class="iq-label">Staff · architecture · scaling discussion</div>
+  <div class="iq-q">"You've set minReplicas: 2 on your HPA. Why not minReplicas: 1?"</div>
+  <div class="iq-a">Single replica = single point of failure. During a <strong>rolling update</strong>, K8s terminates the old pod before (or during) starting the new one. With 1 replica, there's a window where zero pods are running. With 2 replicas + <code>maxUnavailable: 0</code>, at least 1 pod is always alive during the update.<br><br>Additionally, with 1 replica, a node drain (GCP maintenance, node upgrade) would take your service down. With 2 replicas on different nodes (K8s schedules them apart by default), a node going down loses 1 pod but traffic keeps flowing to the other.<br><br>The extra cost of a second pod is the cheapest SLA insurance you'll ever buy.</div>
+</div>
+
+</div><!-- end chapter-k8s -->
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  CHAPTER 2 — TERRAFORM              ║
+     ╚══════════════════════════════════════╝ -->
+<div class="chapter" id="chapter-tf">
+
+<div class="hero">
+  <div class="hero-pill purple">CHAPTER 2 · TERRAFORM</div>
+  <h1>Infrastructure as <em class="p">Code</em></h1>
+  <p>You have a working K8s deployment. Now we make it <strong>repeatable, reviewable, and multi-region</strong>. This chapter covers Terraform, GitOps with ArgoCD, enterprise secrets management, observability, and the architectural patterns that come up in staff-level interviews.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">Covers: <span>Terraform · Multi-Region · GitOps · Secrets · Observability</span></div>
+    <div class="hero-meta-item">Interview tier: <span>Senior → Staff → Principal</span></div>
+  </div>
+</div>
+
+<!-- WHY TERRAFORM -->
+<h2 id="tf-why"><span class="badge p">T</span> gcloud vs Terraform — the real difference</h2>
+
+<div class="hf-box">
+  <div class="hf-label">Your brain already knows this</div>
+  <p><strong>gcloud commands = jQuery.</strong> Imperative. You tell it exactly what to do each time. If the script fails halfway, you don't know what exists.<br><br><strong>Terraform = React.</strong> Declarative. You describe desired state. Terraform diffs current state against desired state and applies only the minimum change. Running it twice is safe. This is <em>idempotency</em> — and it's the reason infrastructure-as-code works at scale.</p>
+</div>
+
+<div class="tw"><table>
+  <tr><th>Concern</th><th>gcloud CLI</th><th>Terraform</th></tr>
+  <tr><td><strong>Reproducibility</strong></td><td>Script breaks if state drifts</td><td>Always converges to declared state</td></tr>
+  <tr><td><strong>Review process</strong></td><td>Who ran what, when? Unknown</td><td>Every change is a PR + plan output</td></tr>
+  <tr><td><strong>Multi-env</strong></td><td>Copy-paste scripts, manual edits</td><td>Modules + variable files</td></tr>
+  <tr><td><strong>Teardown</strong></td><td>Manual, miss something, costs money</td><td><code>terraform destroy</code> — total cleanup</td></tr>
+  <tr><td><strong>Drift detection</strong></td><td>No visibility</td><td><code>terraform plan</code> shows infra vs code delta</td></tr>
+</table></div>
+
+<h2 id="tf-model">The mental model — three concepts, that's it</h2>
+
+<div class="flow">
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>State — Terraform's memory of what exists</strong><p>A <code>terraform.tfstate</code> file maps your configuration to real cloud resources. If someone manually deletes a resource, <code>terraform plan</code> detects the drift. Store state remotely in a GCS bucket — never locally in a team environment.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>Plan — the diff engine</strong><p>Before any change, Terraform computes the delta between current state and desired state. Review it, approve it, then apply. In CI, post the plan output as a PR comment so reviewers see exactly what infra will change alongside the code change.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>Modules — reusable infra components</strong><p>A module is a folder of .tf files encapsulating a logical unit — "a GKE cluster", "a Cloud SQL instance". Call a module like a function: parameters in, resources out. This is how you provision identical infra in multiple regions without copy-paste.</p></div></div>
+</div>
+
+<hr>
+
+<!-- PHASE T1 -->
+<h2 id="tf-structure"><span class="badge p">T1</span> Project structure that scales</h2>
+
+<div class="ft">
+<span class="d">terraform/</span>
+├── <span class="d">modules/</span>               <span class="n"># reusable building blocks</span>
+│   ├── <span class="d">gke-cluster/</span>       <span class="n"># inputs: region, name → outputs: endpoint, sa</span>
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── <span class="d">cloud-sql/</span>         <span class="n"># inputs: region, tier → outputs: private_ip</span>
+│   ├── <span class="d">memorystore/</span>       <span class="n"># inputs: size, tier → outputs: host</span>
+│   └── <span class="d">network/</span>           <span class="n"># VPC, subnets, VPC peering</span>
+│
+├── <span class="d">environments/</span>
+│   ├── <span class="d">prod/</span>
+│   │   ├── main.tf          <span class="n"># calls modules with prod vars</span>
+│   │   ├── variables.tf
+│   │   ├── terraform.tfvars <span class="n"># prod values — NOT committed</span>
+│   │   └── backend.tf       <span class="n"># remote state: GCS bucket + prefix</span>
+│   └── <span class="d">staging/</span>
+│       ├── main.tf
+│       └── backend.tf       <span class="n"># separate state prefix</span>
+│
+└── <span class="d">shared/</span>
+    └── iam.tf               <span class="n"># IAM roles shared across envs</span>
+</div>
+
+<div class="note danger">
+  <span class="nl">Never do this (common mistake)</span>
+  <p>Don't have one flat directory with <code>prod.tf</code> and <code>staging.tf</code> sharing a single state file. A failed staging apply will lock prod. Use separate state per environment — isolated blast radiuses.</p>
+</div>
+
+<h2 id="tf-state">Remote state — the most important thing you'll set up</h2>
+
+<div class="cw">
+  <div class="ch"><span class="cf">terraform/environments/prod/backend.tf</span><span class="cl">terraform</span></div>
+  <pre><span class="ck">terraform</span> {
+  <span class="ck">backend</span> <span class="cs">"gcs"</span> {
+    <span class="ck">bucket</span> = <span class="cs">"note-canva-tf-state"</span>    <span class="cc"># create this bucket manually ONCE</span>
+    <span class="ck">prefix</span> = <span class="cs">"prod/state"</span>             <span class="cc"># staging uses "staging/state"</span>
+  }
+  <span class="ck">required_providers</span> {
+    <span class="ck">google</span> = {
+      <span class="ck">source</span>  = <span class="cs">"hashicorp/google"</span>
+      <span class="ck">version</span> = <span class="cs">"~> 5.0"</span>
+    }
+  }
+}</pre>
+</div>
+<div class="cw">
+  <div class="ch"><span class="cf">Create the state bucket — one time only</span><span class="cl">bash</span></div>
+  <pre>gcloud storage buckets create gs://note-canva-tf-state \
+  --location=europe-west1 \
+  --uniform-bucket-level-access
+
+<span class="cc"># Enable versioning so you can recover from state corruption</span>
+gcloud storage buckets update gs://note-canva-tf-state --versioning</pre>
+</div>
+
+<h2 id="tf-gke">GKE cluster as a Terraform module</h2>
+
+<div class="cw">
+  <div class="ch"><span class="cf">terraform/modules/gke-cluster/main.tf</span><span class="cl">terraform</span></div>
+  <pre><span class="ck">resource</span> <span class="cs">"google_container_cluster"</span> <span class="cs">"main"</span> {
+  <span class="ck">name</span>             = <span class="cv">var.cluster_name</span>
+  <span class="ck">location</span>         = <span class="cv">var.region</span>
+  <span class="ck">project</span>          = <span class="cv">var.project_id</span>
+  <span class="ck">enable_autopilot</span> = <span class="cv">true</span>
+  <span class="ck">network</span>          = <span class="cv">var.network_id</span>
+  <span class="ck">subnetwork</span>       = <span class="cv">var.subnet_id</span>
+
+  <span class="ck">ip_allocation_policy</span> {}  <span class="cc"># required for Autopilot VPC-native</span>
+
+  <span class="ck">release_channel</span> {
+    <span class="ck">channel</span> = <span class="cs">"REGULAR"</span>
+  }
+
+  <span class="ck">workload_identity_config</span> {
+    <span class="cc"># Lets pods authenticate to GCP APIs without SA key files</span>
+    <span class="ck">workload_pool</span> = <span class="cs">"${var.project_id}.svc.id.goog"</span>
+  }
+
+  <span class="cc"># Prevents accidental terraform destroy on prod</span>
+  <span class="ck">deletion_protection</span> = <span class="cv">true</span>
+}
+
+<span class="ck">output</span> <span class="cs">"endpoint"</span> {
+  <span class="ck">value</span>     = <span class="cv">google_container_cluster.main.endpoint</span>
+  <span class="ck">sensitive</span> = <span class="cv">true</span>
+}</pre>
+</div>
+<div class="cw">
+  <div class="ch"><span class="cf">terraform/environments/prod/main.tf — calling modules</span><span class="cl">terraform</span></div>
+  <pre><span class="ck">module</span> <span class="cs">"gke"</span> {
+  <span class="ck">source</span>       = <span class="cs">"../../modules/gke-cluster"</span>
+  <span class="ck">cluster_name</span> = <span class="cs">"note-canva-prod"</span>
+  <span class="ck">region</span>       = <span class="cs">"europe-west1"</span>
+  <span class="ck">project_id</span>   = <span class="cv">var.project_id</span>
+  <span class="ck">network_id</span>   = <span class="cv">module.network.vpc_id</span>
+  <span class="ck">subnet_id</span>    = <span class="cv">module.network.subnet_ids["europe-west1"]</span>
+}
+
+<span class="ck">module</span> <span class="cs">"database"</span> {
+  <span class="ck">source</span>     = <span class="cs">"../../modules/cloud-sql"</span>
+  <span class="ck">region</span>     = <span class="cs">"europe-west1"</span>
+  <span class="ck">tier</span>       = <span class="cs">"db-custom-2-4096"</span>   <span class="cc"># 2 vCPU, 4GB</span>
+  <span class="ck">ha_enabled</span> = <span class="cv">true</span>
+}
+
+<span class="ck">module</span> <span class="cs">"redis_realtime"</span> {
+  <span class="ck">source</span>  = <span class="cs">"../../modules/memorystore"</span>
+  <span class="ck">name</span>    = <span class="cs">"redis-realtime"</span>
+  <span class="ck">region</span>  = <span class="cs">"europe-west1"</span>
+  <span class="ck">size_gb</span> = <span class="cv">1</span>
+}</pre>
+</div>
+
+<h2 id="tf-workflow">The infra change workflow</h2>
+<div class="flow">
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>Engineer opens a PR with .tf changes</strong><p>Same as a code PR. The diff is reviewed by someone who understands infrastructure.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>CI runs <code>terraform plan</code> automatically</strong><p>Posts the plan output as a PR comment. Reviewers see exactly what will be created, modified, or destroyed. A <code>-/+</code> on a database resource is an immediate flag.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>PR approved → merge triggers <code>terraform apply</code></strong><p>Runs in CI with a service account. Engineers never have personal gcloud credentials for prod — only CI does.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>State updated, outputs available</strong><p>GKE endpoint, Redis IPs etc. are now Terraform outputs — downstream K8s config can reference them programmatically.</p></div></div>
+</div>
+
+<hr>
+
+<!-- PHASE T2 -->
+<h2 id="tf-region-why"><span class="badge y">T2</span> Multi-region — why it's not just "run it twice"</h2>
+
+<div class="hf-box">
+  <div class="hf-label">The hard truth about distributed systems</div>
+  <p>Running your app in two regions solves one problem (regional outage) and introduces five others: data consistency, latency routing, split-brain, failover coordination, and cost doubling.</p>
+  <p><strong>Think of it as the backend equivalent of state management at scale.</strong> A user in Tokyo and a user in London are like two browser tabs with their own local state — they need to eventually sync. The question isn't "can I run in two regions?" The question is <strong>"which data can I afford to have stale, and for how long?"</strong> That's your consistency model, and it drives every decision.</p>
+</div>
+
+<div class="tw"><table>
+  <tr><th>Topology</th><th>How it works</th><th>Best for</th><th>Risk</th></tr>
+  <tr><td><strong>Active/Passive</strong></td><td>All writes go to primary. Secondary is warm standby. Manual or auto failover.</td><td>Most apps. Simple operational model.</td><td>1–5 min failover. Small data loss window.</td></tr>
+  <tr><td><strong>Active/Active (reads)</strong></td><td>Writes go to primary. Reads served from any region via read replicas.</td><td>Read-heavy apps: dashboards, content</td><td>Replica lag — reads may be slightly stale</td></tr>
+  <tr><td><strong>Active/Active (writes)</strong></td><td>Any region accepts writes. Conflict resolution required.</td><td>Real-time collaboration, global fintech</td><td>Extremely complex. Needs CRDT-aware data model or Spanner/CockroachDB.</td></tr>
+</table></div>
+
+<p><strong>For Note Canva today</strong>: start with Active/Passive. You get 99.9% of the reliability benefit at 20% of the complexity.</p>
+
+<h2 id="tf-topology">Region topology diagram</h2>
+<div class="diagram-wrap">
+<svg width="100%" viewBox="0 0 780 420" role="img">
+  <defs>
+    <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <!-- Global LB -->
+  <rect x="290" y="14" width="200" height="38" rx="8" fill="#2a1a5e" stroke="#a78bfa" stroke-width="1.2"/>
+  <text x="390" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#a78bfa" font-weight="600">Global HTTP(S) Load Balancer</text>
+  <text x="390" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4f607e">Anycast IP · GFE edge routing</text>
+  <!-- Arrows to regions -->
+  <line x1="340" y1="52" x2="180" y2="100" stroke="#a78bfa" stroke-width="1" marker-end="url(#arr4)"/>
+  <line x1="440" y1="52" x2="600" y2="100" stroke="#a78bfa" stroke-width="1" marker-end="url(#arr4)"/>
+  <!-- PRIMARY REGION -->
+  <rect x="40" y="100" width="280" height="200" rx="10" fill="#0f1420" stroke="#4d9eff" stroke-width="1"/>
+  <text x="60" y="122" font-family="JetBrains Mono,monospace" font-size="10" fill="#4d9eff" font-weight="600">europe-west1 (PRIMARY)</text>
+  <rect x="60" y="132" width="240" height="50" rx="6" fill="#1a3660" stroke="#4d9eff" stroke-width="0.8"/>
+  <text x="180" y="150" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#dde4f0" font-weight="600">GKE Autopilot Cluster</text>
+  <text x="180" y="166" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8899b8">api · realtime · worker</text>
+  <text x="180" y="178" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4f607e">reads + writes</text>
+  <rect x="60" y="196" width="110" height="44" rx="6" fill="#1a3660" stroke="#4d9eff" stroke-width="0.8"/>
+  <text x="115" y="213" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#dde4f0" font-weight="600">Cloud SQL</text>
+  <text x="115" y="227" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8899b8">PRIMARY</text>
+  <text x="115" y="238" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4f607e">all writes</text>
+  <rect x="190" y="196" width="110" height="44" rx="6" fill="#1a3660" stroke="#4d9eff" stroke-width="0.8"/>
+  <text x="245" y="213" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#dde4f0" font-weight="600">Memorystore</text>
+  <text x="245" y="227" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8899b8">Redis HA</text>
+  <text x="245" y="238" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4f607e">realtime + jobs</text>
+  <!-- SECONDARY REGION -->
+  <rect x="460" y="100" width="280" height="200" rx="10" fill="#0f1420" stroke="#2dd98f" stroke-width="1" stroke-dasharray="6,3"/>
+  <text x="480" y="122" font-family="JetBrains Mono,monospace" font-size="10" fill="#2dd98f" font-weight="600">us-central1 (SECONDARY)</text>
+  <rect x="480" y="132" width="240" height="50" rx="6" fill="#0b3020" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="600" y="150" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#dde4f0" font-weight="600">GKE Autopilot Cluster</text>
+  <text x="600" y="166" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8899b8">api · realtime (read-only)</text>
+  <text x="600" y="178" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4f607e">failover: becomes read+write</text>
+  <rect x="480" y="196" width="110" height="44" rx="6" fill="#0b3020" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="535" y="213" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#dde4f0" font-weight="600">Cloud SQL</text>
+  <text x="535" y="227" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8899b8">Read Replica</text>
+  <text x="535" y="238" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4f607e">async from primary</text>
+  <rect x="610" y="196" width="110" height="44" rx="6" fill="#0b3020" stroke="#2dd98f" stroke-width="0.8"/>
+  <text x="665" y="213" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#dde4f0" font-weight="600">Memorystore</text>
+  <text x="665" y="227" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8899b8">Independent</text>
+  <text x="665" y="238" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4f607e">no cross-region sync</text>
+  <!-- Replication arrow -->
+  <path d="M 170 240 Q 390 310 530 240" fill="none" stroke="#f7c84e" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr4)"/>
+  <text x="390" y="308" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f7c84e">async replication (ms–seconds lag)</text>
+  <!-- Legend -->
+  <rect x="40" y="330" width="130" height="20" rx="4" fill="#1a3660" stroke="#4d9eff" stroke-width="0.6"/>
+  <text x="105" y="344" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4d9eff">99.99% SLA region</text>
+  <rect x="460" y="330" width="160" height="20" rx="4" fill="#0b3020" stroke="#2dd98f" stroke-width="0.6"/>
+  <text x="540" y="344" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#2dd98f">warm standby (active in 2–5 min)</text>
+  <!-- Health check -->
+  <rect x="300" y="352" width="180" height="28" rx="6" fill="#24140a" stroke="#f7c84e" stroke-width="0.8"/>
+  <text x="390" y="364" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f7c84e" font-weight="600">Cloud Monitoring</text>
+  <text x="390" y="376" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#8899b8">health checks → LB auto-failover</text>
+  <line x1="390" y1="350" x2="390" y2="314" stroke="#f7c84e" stroke-width="0.8" stroke-dasharray="3,2"/>
+</svg>
+</div>
+
+<h2 id="tf-db-rep">Cross-region database replication</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">terraform/modules/cloud-sql/main.tf</span><span class="cl">terraform</span></div>
+  <pre><span class="ck">resource</span> <span class="cs">"google_sql_database_instance"</span> <span class="cs">"primary"</span> {
+  <span class="ck">name</span>             = <span class="cs">"${var.name}-primary"</span>
+  <span class="ck">region</span>           = <span class="cv">var.primary_region</span>
+  <span class="ck">database_version</span> = <span class="cs">"POSTGRES_15"</span>
+  <span class="ck">deletion_protection</span> = <span class="cv">true</span>
+  <span class="ck">settings</span> {
+    <span class="ck">tier</span> = <span class="cv">var.tier</span>
+    <span class="ck">backup_configuration</span> {
+      <span class="ck">enabled</span>                        = <span class="cv">true</span>
+      <span class="ck">point_in_time_recovery_enabled</span> = <span class="cv">true</span>
+      <span class="ck">transaction_log_retention_days</span> = <span class="cv">7</span>
+    }
+    <span class="ck">ip_configuration</span> {
+      <span class="ck">ipv4_enabled</span>    = <span class="cv">false</span>          <span class="cc"># private IP only — no public endpoint</span>
+      <span class="ck">private_network</span> = <span class="cv">var.vpc_id</span>
+    }
+  }
+}
+
+<span class="ck">resource</span> <span class="cs">"google_sql_database_instance"</span> <span class="cs">"replica"</span> {
+  <span class="ck">name</span>                 = <span class="cs">"${var.name}-replica"</span>
+  <span class="ck">region</span>               = <span class="cv">var.replica_region</span>   <span class="cc"># different region</span>
+  <span class="ck">database_version</span>     = <span class="cs">"POSTGRES_15"</span>
+  <span class="ck">master_instance_name</span> = <span class="cv">google_sql_database_instance.primary.name</span>
+  <span class="ck">replica_configuration</span> {
+    <span class="ck">failover_target</span> = <span class="cv">false</span>  <span class="cc"># manual promotion only</span>
+  }
+  <span class="ck">settings</span> {
+    <span class="ck">tier</span> = <span class="cv">var.tier</span>
+    <span class="ck">ip_configuration</span> {
+      <span class="ck">ipv4_enabled</span>    = <span class="cv">false</span>
+      <span class="ck">private_network</span> = <span class="cv">var.replica_vpc_id</span>
+    }
+  }
+}</pre>
+</div>
+
+<div class="note warn">
+  <span class="nl">The replication lag question — you WILL be asked this</span>
+  <p>Cross-region replication is asynchronous. There is always a lag — typically milliseconds, but can spike. If primary fails, the replica may be N seconds behind. This is your <strong>RPO (Recovery Point Objective)</strong>. For most apps, losing a few seconds of writes is acceptable. For financial transactions, it is not. Know your RPO before choosing a replication topology.</p>
+</div>
+
+<h2 id="tf-traffic">Global Load Balancer with Terraform</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">terraform/modules/global-lb/main.tf</span><span class="cl">terraform</span></div>
+  <pre><span class="ck">resource</span> <span class="cs">"google_compute_global_address"</span> <span class="cs">"default"</span> {
+  <span class="ck">name</span> = <span class="cs">"note-canva-global-ip"</span>
+}
+
+<span class="ck">resource</span> <span class="cs">"google_compute_backend_service"</span> <span class="cs">"api"</span> {
+  <span class="ck">name</span>                  = <span class="cs">"note-canva-api"</span>
+  <span class="ck">protocol</span>              = <span class="cs">"HTTP"</span>
+  <span class="ck">load_balancing_scheme</span> = <span class="cs">"EXTERNAL_MANAGED"</span>
+
+  <span class="cc"># One backend per region — both get traffic by default</span>
+  <span class="ck">backend</span> {
+    <span class="ck">group</span>                 = <span class="cv">var.europe_neg_id</span>    <span class="cc"># Network Endpoint Group from GKE</span>
+    <span class="ck">balancing_mode</span>        = <span class="cs">"RATE"</span>
+    <span class="ck">max_rate_per_endpoint</span> = <span class="cv">100</span>
+    <span class="ck">capacity_scaler</span>       = <span class="cv">1.0</span>
+  }
+
+  <span class="ck">backend</span> {
+    <span class="ck">group</span>                 = <span class="cv">var.uscentral_neg_id</span>
+    <span class="ck">balancing_mode</span>        = <span class="cs">"RATE"</span>
+    <span class="ck">max_rate_per_endpoint</span> = <span class="cv">100</span>
+    <span class="ck">capacity_scaler</span>       = <span class="cv">1.0</span>
+  }
+
+  <span class="ck">health_checks</span> = [<span class="cv">google_compute_health_check.api.id</span>]
+
+  <span class="cc"># Eject unhealthy backends automatically</span>
+  <span class="ck">outlier_detection</span> {
+    <span class="ck">consecutive_errors</span>   = <span class="cv">5</span>
+    <span class="ck">interval</span>             = { <span class="ck">seconds</span> = <span class="cv">10</span> }
+    <span class="ck">base_ejection_time</span>   = { <span class="ck">seconds</span> = <span class="cv">30</span> }
+    <span class="ck">max_ejection_percent</span> = <span class="cv">50</span>  <span class="cc"># never eject >50% of backends at once</span>
+  }
+}</pre>
+</div>
+
+<h2 id="tf-failover">Failover walkthrough</h2>
+
+<div class="iq">
+  <div class="iq-label">Staff-level · distributed systems · asked at Cloudflare, Stripe, N26</div>
+  <div class="iq-q">"Your primary region (europe-west1) goes down. Walk me through what happens in the first 5 minutes."</div>
+  <div class="iq-a"><strong>T+0s:</strong> Health check probes start failing against europe-west1 backends. The Global LB's outlier detection begins counting consecutive errors.<br><br><strong>T+30s:</strong> europe-west1 backends ejected from the LB pool. New traffic routes automatically to us-central1. Users see elevated latency — not an outage.<br><br><strong>T+2min:</strong> Ops team alerted via PagerDuty. Decision point: transient spike, or actual regional failure?<br><br><strong>T+5min:</strong> If confirmed regional failure: promote the Cloud SQL read replica in us-central1 to primary. Update Terraform state. us-central1 is now fully read/write.<br><br><strong>Key insight:</strong> <strong>Application traffic failover is automatic and sub-minute. Database failover is manual and takes 2–5 minutes.</strong> This is your RTO. Design your app to tolerate brief DB unavailability with retry loops and connection pool circuit breakers.</div>
+</div>
+
+<hr>
+
+<!-- PHASE T3 -->
+<h2 id="tf-gitops"><span class="badge g">T3</span> GitOps — the model shift</h2>
+
+<div class="hf-box">
+  <div class="hf-label">The key insight</div>
+  <p>The CI/CD pipeline in Chapter 1 is a <strong>push model</strong>: GitHub Actions runs <code>kubectl apply</code> directly. This works for one cluster and 3 engineers. At scale it breaks down — your cluster state is only as reliable as the last successful CI run.</p>
+  <p><strong>GitOps flips this.</strong> A controller running inside your cluster watches a Git repository and reconciles toward it continuously. Git is the single source of truth. Manual <code>kubectl apply</code> in prod is now an anti-pattern — like mutating the DOM directly in a React app.</p>
+</div>
+
+<h2 id="tf-argocd">ArgoCD setup</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Install ArgoCD into the cluster</span><span class="cl">bash</span></div>
+  <pre>kubectl create namespace argocd
+
+kubectl apply -n argocd -f \
+  https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+kubectl wait --for=condition=available deployment -l app.kubernetes.io/name=argocd-server \
+  -n argocd --timeout=120s
+
+<span class="cc"># Get initial admin password</span>
+kubectl get secret argocd-initial-admin-secret -n argocd \
+  -o jsonpath="{.data.password}" | base64 --decode
+
+kubectl port-forward svc/argocd-server -n argocd 8080:443</pre>
+</div>
+<div class="cw">
+  <div class="ch"><span class="cf">argocd/apps/note-canva-prod.yaml</span><span class="cl">yaml</span></div>
+  <pre><span class="ck">apiVersion</span>: <span class="cv">argoproj.io/v1alpha1</span>
+<span class="ck">kind</span>: <span class="cv">Application</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">note-canva-prod</span>
+  <span class="ck">namespace</span>: <span class="cv">argocd</span>
+<span class="ck">spec</span>:
+  <span class="ck">source</span>:
+    <span class="ck">repoURL</span>: <span class="cs">'https://github.com/yourorg/note-canva'</span>
+    <span class="ck">targetRevision</span>: <span class="cv">main</span>
+    <span class="ck">path</span>: <span class="cv">k8s/prod</span>         <span class="cc"># watches this directory</span>
+  <span class="ck">destination</span>:
+    <span class="ck">server</span>: <span class="cs">'https://kubernetes.default.svc'</span>
+    <span class="ck">namespace</span>: <span class="cv">prod</span>
+  <span class="ck">syncPolicy</span>:
+    <span class="ck">automated</span>:
+      <span class="ck">prune</span>: <span class="cv">true</span>       <span class="cc"># delete resources removed from git</span>
+      <span class="ck">selfHeal</span>: <span class="cv">true</span>   <span class="cc"># revert manual kubectl changes</span></pre>
+</div>
+
+<h2 id="tf-appset">ApplicationSets — one template, N regions</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">argocd/appsets/note-canva-regions.yaml</span><span class="cl">yaml</span></div>
+  <pre><span class="ck">apiVersion</span>: <span class="cv">argoproj.io/v1alpha1</span>
+<span class="ck">kind</span>: <span class="cv">ApplicationSet</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">note-canva-all-regions</span>
+  <span class="ck">namespace</span>: <span class="cv">argocd</span>
+<span class="ck">spec</span>:
+  <span class="ck">generators</span>:
+    - <span class="ck">list</span>:
+        <span class="ck">elements</span>:
+          - <span class="ck">cluster</span>: <span class="cv">gke-europe-west1</span>
+            <span class="ck">region</span>:  <span class="cv">europe-west1</span>
+          - <span class="ck">cluster</span>: <span class="cv">gke-us-central1</span>
+            <span class="ck">region</span>:  <span class="cv">us-central1</span>
+  <span class="ck">template</span>:
+    <span class="ck">metadata</span>:
+      <span class="ck">name</span>: <span class="cs">'note-canva-{{region}}'</span>
+    <span class="ck">spec</span>:
+      <span class="ck">source</span>:
+        <span class="ck">repoURL</span>: <span class="cs">'https://github.com/yourorg/note-canva'</span>
+        <span class="ck">targetRevision</span>: <span class="cv">main</span>
+        <span class="ck">path</span>: <span class="cs">'k8s/prod'</span>
+      <span class="ck">destination</span>:
+        <span class="ck">name</span>: <span class="cs">'{{cluster}}'</span>
+        <span class="ck">namespace</span>: <span class="cv">prod</span></pre>
+</div>
+
+<hr>
+
+<!-- PHASE T4 -->
+<h2 id="tf-secret-manager"><span class="badge r">T4</span> Secrets at scale — three layers</h2>
+
+<div class="flow">
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>GCP Secret Manager — source of truth</strong><p>All secrets live here. Versioned. IAM-controlled. Every access is logged in Cloud Audit Logs. Rotation is built-in. You never see the raw value in your cluster YAML.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>Workload Identity — keyless authentication</strong><p>Pods authenticate to GCP as a service account without needing a key file. A K8s service account is federated to a GCP service account. The pod gets a short-lived token automatically. No secrets to rotate for auth itself.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>External Secrets Operator — the bridge</strong><p>Reads from Secret Manager and writes into K8s Secrets automatically. Your pods still consume standard <code>env.valueFrom.secretKeyRef</code> — nothing in application code changes. Sync happens externally.</p></div></div>
+</div>
+
+<h2 id="tf-workload-id">Workload Identity binding</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Bind K8s service account to GCP service account</span><span class="cl">bash</span></div>
+  <pre><span class="cc"># 1. Create GCP service account for api pods</span>
+gcloud iam service-accounts create note-canva-api \
+  --display-name="Note Canva API pods"
+
+<span class="cc"># 2. Grant access to Secret Manager</span>
+gcloud projects add-iam-policy-binding note-canva-prod \
+  --member="serviceAccount:note-canva-api@note-canva-prod.iam.gserviceaccount.com" \
+  --role="roles/secretmanager.secretAccessor"
+
+<span class="cc"># 3. Allow K8s SA to impersonate the GCP SA</span>
+gcloud iam service-accounts add-iam-policy-binding \
+  note-canva-api@note-canva-prod.iam.gserviceaccount.com \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="serviceAccount:note-canva-prod.svc.id.goog[prod/api]"
+
+<span class="cc"># 4. Annotate the K8s service account in your YAML:</span>
+<span class="cc">#   annotations:</span>
+<span class="cc">#     iam.gke.io/gcp-service-account: note-canva-api@note-canva-prod.iam.gserviceaccount.com</span></pre>
+</div>
+
+<h2 id="tf-eso">External Secrets Operator</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">Install + configure ESO</span><span class="cl">yaml</span></div>
+  <pre><span class="cc"># SecretStore — points ESO at GCP Secret Manager</span>
+<span class="ck">apiVersion</span>: <span class="cv">external-secrets.io/v1beta1</span>
+<span class="ck">kind</span>: <span class="cv">SecretStore</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">gcp-secret-manager</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">provider</span>:
+    <span class="ck">gcpsm</span>:
+      <span class="ck">projectID</span>: <span class="cv">note-canva-prod</span>
+      <span class="ck">auth</span>:
+        <span class="ck">workloadIdentity</span>:
+          <span class="ck">clusterLocation</span>: <span class="cv">europe-west1</span>
+          <span class="ck">clusterName</span>: <span class="cv">note-canva</span>
+          <span class="ck">serviceAccountRef</span>:
+            <span class="ck">name</span>: <span class="cv">api</span>
+---
+<span class="cc"># ExternalSecret — syncs specific secrets into K8s</span>
+<span class="ck">apiVersion</span>: <span class="cv">external-secrets.io/v1beta1</span>
+<span class="ck">kind</span>: <span class="cv">ExternalSecret</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">api-secrets</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">refreshInterval</span>: <span class="cs">"1h"</span>
+  <span class="ck">secretStoreRef</span>:
+    <span class="ck">name</span>: <span class="cv">gcp-secret-manager</span>
+    <span class="ck">kind</span>: <span class="cv">SecretStore</span>
+  <span class="ck">target</span>:
+    <span class="ck">name</span>: <span class="cv">api-secrets</span>
+  <span class="ck">data</span>:
+    - <span class="ck">secretKey</span>: <span class="cv">DB_PASSWORD</span>
+      <span class="ck">remoteRef</span>:
+        <span class="ck">key</span>: <span class="cv">note-canva-db-password</span>
+    - <span class="ck">secretKey</span>: <span class="cv">JWT_SECRET</span>
+      <span class="ck">remoteRef</span>:
+        <span class="ck">key</span>: <span class="cv">note-canva-jwt-secret</span></pre>
+</div>
+
+<hr>
+
+<!-- PHASE T5 -->
+<h2 id="tf-obs-pillars"><span class="badge">T5</span> Observability — three pillars</h2>
+
+<div class="tw"><table>
+  <tr><th>Pillar</th><th>Question it answers</th><th>Tool</th></tr>
+  <tr><td><strong>Metrics</strong></td><td>Is something wrong right now? (quantitative)</td><td>Prometheus + Grafana</td></tr>
+  <tr><td><strong>Logs</strong></td><td>What happened? (forensic detail)</td><td>Cloud Logging + Log Explorer</td></tr>
+  <tr><td><strong>Traces</strong></td><td>Why is this request slow? (latency breakdown)</td><td>OpenTelemetry + Cloud Trace</td></tr>
+</table></div>
+
+<h2 id="tf-otel">OpenTelemetry in Node.js</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">src/telemetry.ts — import FIRST in entrypoint</span><span class="cl">typescript</span></div>
+  <pre><span class="ck">import</span> { NodeSDK } <span class="ck">from</span> <span class="cs">'@opentelemetry/sdk-node'</span>;
+<span class="ck">import</span> { getNodeAutoInstrumentations } <span class="ck">from</span> <span class="cs">'@opentelemetry/auto-instrumentations-node'</span>;
+<span class="ck">import</span> { OTLPTraceExporter } <span class="ck">from</span> <span class="cs">'@opentelemetry/exporter-trace-otlp-proto'</span>;
+<span class="ck">import</span> { PrometheusExporter } <span class="ck">from</span> <span class="cs">'@opentelemetry/exporter-prometheus'</span>;
+<span class="ck">import</span> { Resource } <span class="ck">from</span> <span class="cs">'@opentelemetry/resources'</span>;
+
+<span class="ck">const</span> sdk = <span class="ck">new</span> NodeSDK({
+  resource: <span class="ck">new</span> Resource({
+    <span class="cs">'service.name'</span>:    process.env.SERVICE_NAME ?? <span class="cs">'api'</span>,
+    <span class="cs">'deployment.region'</span>: process.env.REGION ?? <span class="cs">'unknown'</span>,
+  }),
+  traceExporter: <span class="ck">new</span> OTLPTraceExporter({
+    url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
+  }),
+  metricReader: <span class="ck">new</span> PrometheusExporter({ port: <span class="cv">9464</span> }),
+  instrumentations: [getNodeAutoInstrumentations({
+    <span class="cc">// auto-instruments: http, express, pg, redis, bullmq</span>
+    <span class="cs">'@opentelemetry/instrumentation-fs'</span>: { enabled: <span class="cv">false</span> },
+  })],
+});
+
+sdk.start();</pre>
+</div>
+
+<h2 id="tf-slo">SLOs and error budgets</h2>
+
+<div class="hf-box">
+  <div class="hf-label">The concept that changes how you talk about reliability</div>
+  <p>An <strong>SLO (Service Level Objective)</strong> is a target: "99.9% of API requests complete in under 500ms." An <strong>error budget</strong> is what you're allowed to burn: 0.1% of requests = ~43 minutes of downtime per month. <strong>If you have budget left, you can deploy. If you're burning through it, you freeze deployments.</strong></p>
+  <p>This removes politics from "is it safe to ship?" — the answer is in the numbers.</p>
+</div>
+
+<div class="tw"><table>
+  <tr><th>Service</th><th>SLI (what you measure)</th><th>SLO target</th><th>Budget / month</th></tr>
+  <tr><td>api</td><td>% requests HTTP 2xx, latency &lt;500ms</td><td>99.9%</td><td>43 min</td></tr>
+  <tr><td>realtime</td><td>% WebSocket connections alive &gt;30s</td><td>99.5%</td><td>3.6 hr</td></tr>
+  <tr><td>worker</td><td>% jobs completed within SLA window</td><td>99.0%</td><td>7.2 hr</td></tr>
+</table></div>
+
+<hr>
+
+<!-- PHASE T6 -->
+<h2 id="tf-cost"><span class="badge y">T6</span> Cost modelling</h2>
+
+<div class="tw"><table>
+  <tr><th>Resource</th><th>Cost driver</th><th>Optimization</th></tr>
+  <tr><td>Cloud SQL</td><td>Instance tier runs 24/7</td><td>Use <code>db-custom-*</code> to size exactly. HA only on prod.</td></tr>
+  <tr><td>Memorystore</td><td>HA doubles cost (two nodes)</td><td>BASIC tier on staging, STANDARD_HA on prod only.</td></tr>
+  <tr><td>GKE pods</td><td>Autopilot bills for requests, not limits</td><td>Right-size <code>resources.requests</code>. Use VPA recommendations.</td></tr>
+  <tr><td>Egress</td><td>Cross-region transfer is billed per GB</td><td>Keep DB and cluster in same region. Private IPs everywhere.</td></tr>
+  <tr><td>Load Balancer</td><td>Flat fee + per-GB processed</td><td>Enable Cloud CDN. 90% of LB traffic should cache-hit.</td></tr>
+</table></div>
+
+<h2 id="tf-netpol">Network Policy — zero-trust inside the cluster</h2>
+<div class="cw">
+  <div class="ch"><span class="cf">k8s/prod/network-policy.yaml — deny all, then allow explicitly</span><span class="cl">yaml</span></div>
+  <pre><span class="cc"># 1. Default deny-all ingress in prod namespace</span>
+<span class="ck">apiVersion</span>: <span class="cv">networking.k8s.io/v1</span>
+<span class="ck">kind</span>: <span class="cv">NetworkPolicy</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">default-deny-ingress</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">podSelector</span>: {}  <span class="cc"># matches ALL pods</span>
+  <span class="ck">policyTypes</span>: [<span class="cv">Ingress</span>]
+---
+<span class="cc"># 2. Allow only ingress controller → api pods</span>
+<span class="ck">apiVersion</span>: <span class="cv">networking.k8s.io/v1</span>
+<span class="ck">kind</span>: <span class="cv">NetworkPolicy</span>
+<span class="ck">metadata</span>:
+  <span class="ck">name</span>: <span class="cv">allow-ingress-to-api</span>
+  <span class="ck">namespace</span>: <span class="cv">prod</span>
+<span class="ck">spec</span>:
+  <span class="ck">podSelector</span>:
+    <span class="ck">matchLabels</span>:
+      <span class="ck">app</span>: <span class="cv">api</span>
+  <span class="ck">ingress</span>:
+    - <span class="ck">from</span>:
+        - <span class="ck">namespaceSelector</span>:
+            <span class="ck">matchLabels</span>:
+              <span class="ck">kubernetes.io/metadata.name</span>: <span class="cv">ingress-nginx</span>
+      <span class="ck">ports</span>:
+        - <span class="ck">port</span>: <span class="cv">3000</span></pre>
+</div>
+
+<h2 id="tf-supply-chain">Supply chain security</h2>
+
+<div class="flow">
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>Image scanning in CI — block before it ships</strong><p>Add <code>trivy image --exit-code 1 --severity HIGH,CRITICAL $IMAGE</code> after <code>docker build</code>. Trivy scans for CVEs. HIGH or CRITICAL vulnerabilities fail the build. Fix the image before it ever reaches the cluster.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>Binary Authorization — only signed images in prod</strong><p>GCP Binary Authorization requires images to be attested (signed) by your CI pipeline before GKE will run them. An image that didn't come from your pipeline cannot be deployed, even by someone with cluster credentials.</p></div></div>
+  <div class="fi"><div class="fl"><div class="fd p"></div><div class="fs"></div></div><div class="fb"><strong>Distroless base images</strong><p>Replace <code>FROM node:20</code> with <code>FROM gcr.io/distroless/nodejs20-debian12</code>. No shell, no package manager, no utilities. A compromised pod has nowhere to go. Production containers should not have a shell.</p></div></div>
+</div>
+
+<hr>
+
+<!-- INTERVIEW SECTION -->
+<h2 id="tf-interview"><span class="badge g">↗</span> Interview questions — Terraform &amp; Architecture</h2>
+
+<div class="iq">
+  <div class="iq-label">Senior / Staff · asked at Google, Cloudflare, Stripe</div>
+  <div class="iq-q">"Why would you choose Terraform over scripting infrastructure with the cloud CLI?"</div>
+  <div class="iq-a">The answer isn't "Terraform is better." It's about <strong>idempotency and state reconciliation</strong>. A bash script using gcloud is a one-way operation — if it fails halfway, you don't know what exists and what doesn't. Terraform maintains a state file mapping the real world to your configuration. Running it twice is safe. It also enables <strong>plan/apply separation</strong> — you can see exactly what will change before committing, critical for production. And every change becomes a reviewable PR with a diff, not a shell history entry.</div>
+</div>
+
+<div class="iq">
+  <div class="iq-label">Staff · system design · multiple environments</div>
+  <div class="iq-q">"You need to deploy the same app to 5 different GCP projects. How do you structure this?"</div>
+  <div class="iq-a">Terraform <strong>modules + directory-per-environment</strong>. Modules define reusable infra components. Each environment directory calls the same modules with environment-specific variables — region, tier, replica counts, HA settings. Adding a new environment is a new 20-line <code>main.tf</code> that calls existing modules. This is <strong>DRY applied to infrastructure</strong>: the module is the single source of truth for "how we build a GKE cluster." The environment files only capture "which values to use."</div>
+</div>
+
+<div class="iq">
+  <div class="iq-label">Principal / Architect · reliability</div>
+  <div class="iq-q">"Define RTO and RPO. What are realistic targets for Note Canva?"</div>
+  <div class="iq-a"><strong>RPO (Recovery Point Objective)</strong>: maximum acceptable data loss, measured in time. "We can lose no more than 5 seconds of writes." This drives replication strategy.<br><br><strong>RTO (Recovery Time Objective)</strong>: maximum acceptable downtime after a failure. "The app must serve traffic again within 2 minutes."<br><br>For Note Canva: RPO of 5–10 seconds is achievable with async cross-region replication (typical lag). RTO of 2 minutes is achievable with automatic LB failover + pre-warmed secondary cluster. The bottleneck is Cloud SQL replica promotion at ~5 minutes — which is why you keep the secondary GKE cluster warm and serving reads from the replica immediately, before DB promotion completes.</div>
+</div>
+
+<div class="iq">
+  <div class="iq-label">Staff · real-time systems · WebSocket specifics</div>
+  <div class="iq-q">"Your realtime service uses WebSockets. How do you handle active connections during a region failover?"</div>
+  <div class="iq-a">WebSocket connections are <strong>stateful</strong> — they don't transparently reroute like HTTP. During failover, active connections to the failed region will die. The client must reconnect. Good client code handles this: exponential backoff, reconnect to the same document channel.<br><br>The key engineering decision: <strong>document state must live in the database, not in memory.</strong> When a client reconnects to the secondary region, it fetches current state from the replica and picks up from there. If you've built realtime with in-memory state as source of truth, a region failover will expose that gap. Design sessions to be reconstructable from persistent storage at any point.</div>
+</div>
+
+<div class="iq">
+  <div class="iq-label">Principal · the meta question · no right answer</div>
+  <div class="iq-q">"Limited bandwidth. Which do you tackle first: Terraform migration, multi-region, GitOps, or full observability?"</div>
+  <div class="iq-a">Order by <strong>risk reduction per unit of effort</strong>:<br><br><strong>1. Observability first</strong> — you cannot safely change anything you can't measure. Set up basic metrics and alerting before any other infra work. Otherwise you'll be flying blind during every subsequent migration.<br><br><strong>2. Terraform second</strong> — converts infra from "only one person knows how to rebuild this" to reviewable, repeatable, documented. Medium effort, huge risk reduction.<br><br><strong>3. GitOps third</strong> — dramatically improves deployment safety and audit trail. Compounds well with Terraform.<br><br><strong>4. Multi-region last</strong> — highest complexity, highest cost. Only justified when your SLO target requires it or customer data residency demands it. It will consume months of engineering time and permanently increase operational complexity. Don't build it until you have a hard business requirement.</div>
+</div>
+
+<div class="note purple">
+  <span class="nl">The meta-skill all these questions test</span>
+  <p>Every question above tests the same skill: <strong>can you reason about tradeoffs under constraint?</strong> The interviewer doesn't care which tool you pick. They care that you can identify the relevant variables — team size, compliance requirements, reliability targets, operational complexity — weight them, and arrive at a defensible position. The candidate who says "Terraform Cloud is always better" fails. The candidate who says "it depends on these three factors, and here's how I'd evaluate them" passes.</p>
+</div>
+
+</div><!-- end chapter-tf -->
+
+</main>
+</div><!-- end page-shell -->
+
+<script>
+(function() {
+
+  /* ── Theme toggle ── */
+  const root = document.documentElement;
+  const body = document.body;
+  const btnTheme = document.getElementById('themeToggle');
+  const mobileThemeBtn = document.getElementById('mobileThemeToggle');
+  const lbl = document.getElementById('themeLabel');
+  const moon = document.getElementById('iconMoon');
+  const sun = document.getElementById('iconSun');
+
+  function toggleTheme() {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+    localStorage.setItem('devops-guide-theme', next);
+  }
+
+  const stored = localStorage.getItem('devops-guide-theme');
+  if (stored === 'light') applyTheme('light');
+
+  btnTheme.addEventListener('click', toggleTheme);
+  mobileThemeBtn.addEventListener('click', toggleTheme);
+
+  function applyTheme(t) {
+    if (t === 'light') {
+      root.setAttribute('data-theme', 'light');
+      lbl.textContent = 'Light';
+      moon.style.display = 'none';
+      sun.style.display = 'block';
+    } else {
+      root.removeAttribute('data-theme');
+      lbl.textContent = 'Dark';
+      moon.style.display = 'block';
+      sun.style.display = 'none';
+    }
+  }
+
+  /* ── Mobile drawer ── */
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  const backdrop = document.getElementById('mobileBackdrop');
+  const sidebar = document.getElementById('sidebar');
+
+  function closeDrawer() {
+    body.classList.remove('drawer-open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  function openDrawer() {
+    body.classList.add('drawer-open');
+    menuBtn.setAttribute('aria-expanded', 'true');
+  }
+
+  menuBtn.addEventListener('click', function() {
+    if (body.classList.contains('drawer-open')) {
+      closeDrawer();
+    } else {
+      openDrawer();
+    }
+  });
+
+  backdrop.addEventListener('click', closeDrawer);
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') closeDrawer();
+  });
+
+  /* ── Chapter switcher ── */
+  const btnK8s = document.getElementById('btnK8s');
+  const btnTf = document.getElementById('btnTf');
+  const mobileBtnK8s = document.getElementById('mobileBtnK8s');
+  const mobileBtnTf = document.getElementById('mobileBtnTf');
+  const mobileChapterLabel = document.getElementById('mobileChapterLabel');
+
+  function updateChapterUI(isK8s) {
+    btnK8s.className = 'nav-chapter-btn' + (isK8s ? ' active-k8s' : '');
+    btnTf.className = 'nav-chapter-btn' + (!isK8s ? ' active-tf' : '');
+    mobileBtnK8s.className = 'mobile-chapter-btn' + (isK8s ? ' active-k8s' : '');
+    mobileBtnTf.className = 'mobile-chapter-btn' + (!isK8s ? ' active-tf' : '');
+
+    document.getElementById('nav-k8s').classList.toggle('visible', isK8s);
+    document.getElementById('nav-tf').classList.toggle('visible', !isK8s);
+    document.getElementById('chapter-k8s').classList.toggle('visible', isK8s);
+    document.getElementById('chapter-tf').classList.toggle('visible', !isK8s);
+
+    mobileChapterLabel.textContent = isK8s ? 'chapter 1 · kubernetes' : 'chapter 2 · terraform';
+  }
+
+  window.switchChapter = function(ch) {
+    const isK8s = (ch === 'k8s');
+    updateChapterUI(isK8s);
+    closeDrawer();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    localStorage.setItem('devops-guide-chapter', ch);
+  };
+
+  sidebar.querySelectorAll('a[href^="#"]').forEach(function(link) {
+    link.addEventListener('click', function() {
+      if (window.innerWidth <= 980) closeDrawer();
+    });
+  });
+
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 980) closeDrawer();
+  });
+
+  const savedCh = localStorage.getItem('devops-guide-chapter');
+  updateChapterUI(savedCh !== 'tf');
+
+})();
+</script>
+</body>
+</html>
